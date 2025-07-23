@@ -6,8 +6,8 @@ namespace backend.Dtos
         string Position,
         string JobTitle,
         DateTime DateHired,
-        string ManagerName,
-        string ManagerEmail,
+        string? ManagerName,
+        string? ManagerEmail,
         int TotalLeaveDays,
         int LeaveDaysTaken,
         ICollection<LeaveApplicationDto> LeaveApplications

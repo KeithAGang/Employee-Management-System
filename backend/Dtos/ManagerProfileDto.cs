@@ -4,13 +4,20 @@ namespace backend.Dtos
         string FirstName,
         string LastName,
         string Email,
-        string PhoneNumber,
         string Department,
-        ICollection<EmployeeShort> Subordinates
+        ICollection<EmployeeShort> Subordinates,
+        bool IsActive = true
     );
 
     public record EmployeeShort(
         string FullName,
         string Email
+    );
+
+     public record UpdateManagerProfileDto(
+        string? FirstName,
+        string? LastName,
+        string? Department,
+        string? OfficeLocation
     );
 }

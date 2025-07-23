@@ -64,7 +64,7 @@ namespace backend.Controllers
             }
         }
 
-        [HttpPost("update-profile")]
+        [HttpPut("update-profile")]
         [Authorize(Roles = "Employee")]
         public async Task<IActionResult> UpdateEmployeeProfile(UpdateEmployeeProfileDto request)
         {
@@ -96,7 +96,7 @@ namespace backend.Controllers
                 await _employeeServices.ApplyForLeaveAsync(userIdGuid, request);
                 return Ok(new { message = "Leave application submitted successfully." });
             }
-             catch (UserNotFoundException ex)
+            catch (UserNotFoundException ex)
             {
                 _logger.LogError(ex, "User not found while retrieving sales records.");
                 return NotFound(new { message = ex.Message });
@@ -118,9 +118,31 @@ namespace backend.Controllers
                 await _employeeServices.RecordSalesAsync(userIdGuid, createSalesDto);
                 return Ok(new { message = "Sales record created successfully." });
             }
-             catch (UserNotFoundException ex)
+            catch (UserNotFoundException ex)
             {
                 _logger.LogError(ex, "User not found while retrieving sales records.");
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while recording sales.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpPut("update-sales")]
+        [Authorize(Roles = "Employee")]
+        public async Task<IActionResult> UpdateSales(UpdateSalesDto updateSalesDto)
+        {
+            try
+            {
+                var userIdGuid = _getIdFromCookie.IdFromToken();
+                await _employeeServices.UpdateSalesAsync(userIdGuid, updateSalesDto);
+                return Ok(new { message = "Sales record created successfully." });
+            }
+            catch (SalesRecordNotFoundException ex)
+            {
+                _logger.LogError(ex, "Sales Record Not Found.");
                 return NotFound(new { message = ex.Message });
             }
             catch (Exception ex)
@@ -151,6 +173,7 @@ namespace backend.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        
 
     }
 }

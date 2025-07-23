@@ -11,6 +11,8 @@ namespace backend.Models
         public required string Department { get; set; }
         public string? OfficeLocation { get; set; }
 
+        public bool IsActive { get; set; } = true;
+
         // Navigation property for direct reports (One-to-Many: One Manager to Many Employees)
         // This collection allows you to easily get all employees managed by this manager.
         public ICollection<Employee> DirectReports { get; set; } = new List<Employee>();

@@ -58,7 +58,8 @@ namespace backend.Services
                     .Select(la => new LeaveApplicationDto(
                         la.StartDate,
                         la.EndDate,
-                        la.Reason
+                        la.Reason,
+                        null
                     )).ToListAsync()
             );
         }
@@ -118,6 +119,21 @@ namespace backend.Services
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task UpdateSalesAsync(Guid userId, UpdateSalesDto updateSalesDto)
+        {
+            var employee = await _dbContext.Employees
+                .Include(e => e.User)
+                .FirstOrDefaultAsync(e => e.UserId == userId) ?? throw new UserNotFoundException();
+
+            var salesRecord = await _dbContext.SalesRecords
+                .FirstOrDefaultAsync(sr => sr.EmployeeId == employee.UserId && sr.Id == updateSalesDto.SalesRecordId) ?? throw new SalesRecordNotFoundException();
+
+            salesRecord.ProductName = updateSalesDto.ProductName ?? salesRecord.ProductName;
+            salesRecord.Notes = updateSalesDto.Notes ?? salesRecord.Notes;
+
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task<ICollection<GetSalesDto>> GetSalesRecordsAsync(Guid userId)
         {
             var employee = await _dbContext.Employees
@@ -127,6 +143,7 @@ namespace backend.Services
             return await _dbContext.SalesRecords
                 .Where(sr => sr.EmployeeId == employee.UserId)
                 .Select(sr => new GetSalesDto(
+                    sr.Id,
                     sr.CustomerName,
                     sr.SaleDate,
                     sr.Quantity,

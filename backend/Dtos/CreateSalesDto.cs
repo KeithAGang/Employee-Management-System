@@ -9,4 +9,11 @@ namespace backend.Dtos
         DateTime SaleDate,
         string? Notes
     );
+
+    public record UpdateSalesDto(
+        Guid SalesRecordId,
+        string CustomerName,
+        string ProductName,
+        string? Notes
+    );
 }
