@@ -15,7 +15,6 @@ namespace backend.Models
         // This collection allows you to easily get all employees managed by this manager.
         public ICollection<Employee> DirectReports { get; set; } = new List<Employee>();
 
-        // (Optional, as discussed previously) A manager can approve many leave applications
         public ICollection<LeaveApplication> LeaveApplicationsApproved { get; set; } = new List<LeaveApplication>();
     }
 }

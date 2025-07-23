@@ -10,7 +10,7 @@ namespace backend.Models
 
         public required string Position { get; set; }
         public required string JobTitle { get; set; }
-        public DateTime DateHired { get; set; } // Good to add
+        public DateTime DateHired { get; set; }
 
         // Navigation property for Manager relationship (Many-to-One: Many Employees to One Manager)
         public Guid? ManagerId { get; set; } // Foreign Key to Manager's UserId (if Manager is also a User/Employee)

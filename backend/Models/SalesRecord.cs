@@ -8,7 +8,7 @@ namespace backend.Models
 
         public required string CustomerName { get; set; }
         public required string ProductName { get; set; }
-        public decimal Quantity { get; set; }
+        public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal TotalAmount { get; set; }
         public DateTime SaleDate { get; set; } = DateTime.UtcNow;

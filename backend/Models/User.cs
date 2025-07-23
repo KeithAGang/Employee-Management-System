@@ -12,10 +12,20 @@ namespace backend.Models
         public Employee? EmployeeProfile { get; set; } // A User *might* have an Employee profile
         public Manager? ManagerProfile { get; set; }   // A User *might* have a Manager profile
 
+        // JWT related properties
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiryTime { get; set; }
+
+
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
         // Collection of notifications for the user
         public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+
+        public string FullName()
+        {
+            return $"{FirstName} {LastName}";
+        }
     }
 }
