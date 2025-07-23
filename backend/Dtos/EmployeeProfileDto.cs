@@ -10,7 +10,8 @@ namespace backend.Dtos
         string? ManagerEmail,
         int TotalLeaveDays,
         int LeaveDaysTaken,
-        ICollection<LeaveApplicationDto> LeaveApplications
+        ICollection<LeaveApplicationDto> LeaveApplications,
+        ICollection<SendNotificationDto>? Notifications
     );
 
     public record UpdateEmployeeProfileDto(

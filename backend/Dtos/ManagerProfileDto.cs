@@ -6,6 +6,7 @@ namespace backend.Dtos
         string Email,
         string Department,
         ICollection<EmployeeShort> Subordinates,
+        ICollection<SendNotificationDto>? Notifications,
         bool IsActive = true
     );
 

@@ -1,7 +1,9 @@
 using System.Text;
 using backend.Data;
+using backend.Hubs;
 using backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
@@ -16,13 +18,22 @@ builder.Services.Configure<JwtOptions>(
 
 // Configure Entity Framework Core with PostgreSQL
 var connectionString = builder.Configuration.GetConnectionString("PGConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options => {
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
     options.UseNpgsql(connectionString);
 });
-    
+
+builder.Services.AddSignalR();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<GetIdFromCookie>();
+builder.Services.AddScoped<GetEmailFromCookieService>();
 builder.Services.AddScoped<AuthTokenProcessor>();
+builder.Services.AddSingleton<IUserIdProvider, EmailBasedUserIdProvider>();
+builder.Services.AddHostedService<LeaveNotificationWorker>();
+builder.Services.AddScoped<LeaveDaysApproachingService>();
+
+
 
 builder.Services.AddAuthentication(opt =>
 {
@@ -81,5 +92,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<NotificationsHub>("/notifications");
 
 app.Run();

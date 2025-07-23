@@ -23,6 +23,7 @@ namespace backend.Models
         LeaveRejected,
         LeaveApplicationSubmitted,
         LeaveApproaching,
+        AccountActivated,
         NewSalesRecord,
         PerformanceReviewDue,
         ReportReady,

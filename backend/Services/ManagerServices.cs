@@ -1,15 +1,18 @@
 using backend.Data;
 using backend.Dtos;
 using backend.Exceptions;
+using backend.Hubs;
 using backend.Models;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services
 {
-    public class ManagerServices(ILogger<ManagerServices> logger, ApplicationDbContext dbContext)
+    public class ManagerServices(ILogger<ManagerServices> logger, ApplicationDbContext dbContext, IHubContext<NotificationsHub, INotificationsClient> hub)
     {
         private readonly ILogger<ManagerServices> _logger = logger;
         private readonly ApplicationDbContext _dbContext = dbContext;
+        private readonly IHubContext<NotificationsHub, INotificationsClient> _hub = hub;
 
         public async Task CreateManagerProfileAsync(Guid userId, CreateManagerProfileDto createManagerProfileDto)
 
@@ -44,7 +47,14 @@ namespace backend.Services
                 Subordinates: [.. manager.DirectReports.Select(e => new EmployeeShort(
                     FullName: e.User.FullName(),
                     Email: e.User.Email
-                ))]
+                ))],
+                Notifications: await _dbContext.Notifications
+                    .Where(n => n.RecipientId == manager.UserId)
+                    .Select(n => new SendNotificationDto(
+                        n.Message,
+                        n.IsRead
+                    )).ToListAsync(),
+                IsActive: manager.IsActive
             );
         }
 
@@ -62,20 +72,25 @@ namespace backend.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<ManagerProfileDto> GetUnpromotedManagerProfile(string email)
+        public async Task<ManagerProfileDto[]> GetUnpromotedManagerProfile()
         {
-            var profile = await _dbContext.Managers
+            var profiles = await _dbContext.Managers
                 .Include(m => m.User)
-                .FirstOrDefaultAsync(m => m.User.Email == email && !m.IsActive) ?? throw new ManagerNotFoundException();
+                .Where(m => !m.IsActive)
+                .ToArrayAsync();
 
-            return new ManagerProfileDto(
+            if (profiles.Length == 0)
+                throw new ManagerNotFoundException();
+
+            return profiles.Select(profile => new ManagerProfileDto(
                 FirstName: profile.User.FirstName,
                 LastName: profile.User.LastName,
                 Email: profile.User.Email,
                 Department: profile.Department,
                 Subordinates: [],
+                Notifications: [],
                 IsActive: profile.IsActive
-            );
+            )).ToArray();
 
         }
 
@@ -87,7 +102,26 @@ namespace backend.Services
 
             profile.IsActive = true;
 
+
+            var sendNotification = new SendNotificationDto(
+                Message: "Your manager profile has been activated.",
+                IsRead: false
+            );
+
+            var notification = new Notification
+            {
+                RecipientId = profile.UserId,
+                Message = sendNotification.Message,
+                IsRead = sendNotification.IsRead,
+                CreatedAt = DateTime.UtcNow,
+                RelatedEntityType = "ManagerProfileActivation"
+            };
+
+            await _dbContext.Notifications.AddAsync(notification);
             await _dbContext.SaveChangesAsync();
+
+            await _hub.Clients.User(profile.User.Email)
+                .SendNotification(sendNotification);
         }
 
         public async Task<EmployeeProfileDto> GetSubordinateProfileAsync(Guid managerId, string subordinateEmail)
@@ -114,12 +148,13 @@ namespace backend.Services
                     EndDate: la.EndDate,
                     Reason: la.Reason
                 ))],
+                Notifications: [],
                 LeaveDaysTaken: subordinate.LeaveDaysTaken,
                 TotalLeaveDays: subordinate.TotalLeaveDaysEntitled
             );
         }
-        
-        public async Task ApproveSubordinateLeave(Guid userId, LeaveApplicationDto leaveApplicationDto)
+
+        public async Task ApproveSubordinateLeave(Guid userId, LeaveApplicationIdDto leaveApplicationDto)
         {
             var manager = await _dbContext.Managers
                 .Include(m => m.DirectReports)
@@ -135,7 +170,27 @@ namespace backend.Services
 
             leaveApplication.Status = LeaveStatus.Approved;
 
+
+            var sendNotification = new SendNotificationDto(
+                Message: $"Your leave application from {leaveApplication.StartDate.ToShortDateString()} to {leaveApplication.EndDate.ToShortDateString()} has been approved.",
+                IsRead: false
+            );
+
+            var notification = new Notification
+            {
+                RecipientId = subordinate.UserId,
+                Message = sendNotification.Message,
+                IsRead = sendNotification.IsRead,
+                CreatedAt = DateTime.UtcNow,
+                RelatedEntityType = "LeaveApplicationApproval"
+            };
+
+            await _dbContext.Notifications.AddAsync(notification);
+
             await _dbContext.SaveChangesAsync();
+            
+            await _hub.Clients.User(subordinate.User.Email)
+                .SendNotification(sendNotification);
         }
 
     }

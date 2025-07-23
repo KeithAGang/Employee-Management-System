@@ -12,10 +12,7 @@ namespace backend.Dtos
         string email
     );
 
-    public record LeaveApplicationState(
-        Guid? ApplicationId,
-        DateTime StartDate,
-        DateTime EndDate,
-        string Reason
+    public record LeaveApplicationIdDto(
+        Guid ApplicationId
     );
 }
