@@ -18,6 +18,7 @@ namespace backend.Controllers
         private readonly GetIdFromCookie _getIdFromCookie = getIdFromCookie;
 
         [HttpPost("create-profile")]
+        [Authorize()]
         public async Task<IActionResult> CreateManagerProfile(CreateManagerProfileDto request)
         {
             try

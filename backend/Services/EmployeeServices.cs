@@ -33,7 +33,7 @@ namespace backend.Services
                 UserId = user.Id,
                 Position = createUserProfileDto.Position,
                 JobTitle = createUserProfileDto.JobTitle,
-                DateHired = createUserProfileDto.DateHired,
+                DateHired = DateTime.SpecifyKind(createUserProfileDto.DateHired, DateTimeKind.Utc),
                 ManagerId = manager.UserId,
                 TotalLeaveDaysEntitled = 20
             };

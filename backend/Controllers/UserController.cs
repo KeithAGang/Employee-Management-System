@@ -26,7 +26,8 @@ namespace backend.Controllers
         {
             try
             {
-                return Ok(await _userServices.RegisterUserAsync(request));
+                await _userServices.RegisterUserAsync(request);
+                return Ok(new { message = "User registered successfully" });
 
             }
             catch (UserAlreadyExistsException ex)
@@ -59,6 +60,27 @@ namespace backend.Controllers
             }
         }
 
-        // Additional action methods can be added here
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto request)
+        {
+            try
+            {
+                await _userServices.ResetPasswordAsync(request);
+                return Ok(new { message = "Password reset successfully" });
+            }
+            catch (UserDetailsException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (UserNotFoundException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while resetting the password.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }

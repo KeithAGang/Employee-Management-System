@@ -1,8 +1,11 @@
+import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { GalleryVerticalEnd } from 'lucide-react'
-import { LoginForm } from './components/login-form'
 
-function App() {
+export const Route = createFileRoute('/auth')({
+  component: AuthLayout,
+})
 
+function AuthLayout() {
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
@@ -12,10 +15,8 @@ function App() {
           </div>
           Corp Inc.
         </a>
-        <LoginForm />
+        <Outlet />
       </div>
     </div>
   )
 }
-
-export default App

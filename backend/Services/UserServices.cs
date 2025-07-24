@@ -13,7 +13,7 @@ namespace backend.Services
         private readonly ApplicationDbContext _dbContext = dbContext;
         private readonly ILogger _logger = logger;
 
-        public async Task<User> RegisterUserAsync(CreateUserDto createUser)
+        public async Task RegisterUserAsync(CreateUserDto createUser)
         {
             var userExists = await _dbContext.Users
                 .FirstOrDefaultAsync(u => u.Email == createUser.Email);
@@ -49,7 +49,6 @@ namespace backend.Services
             _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
 
-            return user;
         }
 
         public async Task<UserLoginResponseDto> Login(UserLoginDto userLogin)
@@ -72,7 +71,7 @@ namespace backend.Services
 
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiryTime = exptime;
-            
+
             await _dbContext.SaveChangesAsync();
 
             _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("ACCESS_TOKEN", token, exptime);
@@ -88,7 +87,29 @@ namespace backend.Services
                 user.FullName(),
                 role
             );
-            
+        }
+        
+        public async Task ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
+        {
+            var user = await _dbContext.Users
+                .FirstOrDefaultAsync(u => u.Email == resetPasswordDto.Email);
+
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            if (user.FirstName != resetPasswordDto.FirstName && user.LastName != resetPasswordDto.LastName)
+            {
+                throw new UserDetailsException();
+            }
+
+            var passwordHash = new PasswordHasher<User>()
+                .HashPassword(user, resetPasswordDto.NewPassword);
+
+            user.PasswordHash = passwordHash;
+
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
