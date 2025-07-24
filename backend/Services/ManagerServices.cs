@@ -37,6 +37,8 @@ namespace backend.Services
                 .Include(m => m.User)
                 .Include(m => m.DirectReports)
                     .ThenInclude(e => e.User)
+                .Include(m => m.DirectReports)
+                    .ThenInclude(e => e.LeaveApplications)
                 .FirstOrDefaultAsync(m => m.UserId == userId) ?? throw new UserNotFoundException();
 
             return new ManagerProfileDto(
@@ -169,6 +171,8 @@ namespace backend.Services
             var manager = await _dbContext.Managers
                 .Include(m => m.DirectReports)
                     .ThenInclude(e => e.LeaveApplications)
+                .Include(m => m.DirectReports)
+                    .ThenInclude(e => e.User)
                 .FirstOrDefaultAsync(m => m.UserId == userId) ?? throw new UserNotFoundException();
 
             var subordinate = manager.DirectReports

@@ -77,6 +77,28 @@ namespace backend.Controllers
             }
         }
 
+        [HttpGet("notifications")]
+        [Authorize()]
+        public async Task<IActionResult> GetUserNotifications()
+        {
+            try
+            {
+                var userIdGuid = _getIdFromCookie.IdFromToken();
+                var response = await _userServices.GetNotifications(userIdGuid);
+                return Ok(response);
+            }
+            catch (UserNotFoundException ex)
+            {
+                _logger.LogError(ex, "User Not Found!");
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while registering the user.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordDto request)
         {

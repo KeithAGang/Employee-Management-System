@@ -114,6 +114,18 @@ namespace backend.Services
         }
 
 
+        public async Task<SendNotificationDto[]> GetNotifications(Guid userId)
+        {
+            var user = await _dbContext.Users
+                        .Include(u => u.Notifications)
+                        .FirstOrDefaultAsync(u => u.Id == userId) ?? throw new UserNotFoundException();
+
+            return [.. user.Notifications.Select(n => new SendNotificationDto(
+                n.Message,
+                n.IsRead
+            ))];
+        }
+
         public async Task<UserLoginResponseDto> CheckMe(Guid userId)
         {
             var user = await _dbContext.Users

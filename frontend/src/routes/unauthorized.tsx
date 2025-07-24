@@ -1,5 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Link } from 'lucide-react'
+import { createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/unauthorized')({
   component: RouteComponent,
@@ -13,8 +12,8 @@ function RouteComponent() {
         You do not have the necessary permissions to view this page.
       </p>
       <Link
+        className="py-2 px-4 rounded-md bg-black w-fit justify-center items-center text-white"
         to="/auth/login"
-        className="py-2 px-4 rounded-md bg-black text-white hover:bg-gray-800 transition-colors"
       >
         Go to Login
       </Link>

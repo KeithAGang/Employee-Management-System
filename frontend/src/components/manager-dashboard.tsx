@@ -28,6 +28,10 @@ const data = {
           to: "/manager/leave-applications",
           isActive: false,
         },
+        {
+          title: "Pending Applications",
+          to: "/manager/approve-application"
+        }
       ],
     },
     {
@@ -51,15 +55,10 @@ const data = {
       to: "/notifications",
       items: [
         {
-          title: "Read",
-          to: "/notifications/read",
+          title: "Inbox",
+          to: "/manager/notifications",
           isActive: false,
-        },
-        {
-          title: "Unread",
-          to: "/notifications/unread",
-          isActive: false,
-        },
+        }
       ],
     },
     {

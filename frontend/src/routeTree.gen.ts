@@ -19,8 +19,10 @@ import { Route as ManagerIndexRouteImport } from './routes/manager/index'
 import { Route as SetupManagerProfileRouteImport } from './routes/setup/manager-profile'
 import { Route as SetupEmployeeProfileRouteImport } from './routes/setup/employee-profile'
 import { Route as ManagerPromoteRouteImport } from './routes/manager/promote'
+import { Route as ManagerNotificationsRouteImport } from './routes/manager/notifications'
 import { Route as ManagerLeaveApplicationsRouteImport } from './routes/manager/leave-applications'
 import { Route as ManagerEditMyProfileRouteImport } from './routes/manager/edit-my-profile'
+import { Route as ManagerApproveApplicationRouteImport } from './routes/manager/approve-application'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthPassresetRouteImport } from './routes/auth/passreset'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
@@ -76,6 +78,11 @@ const ManagerPromoteRoute = ManagerPromoteRouteImport.update({
   path: '/promote',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
+const ManagerNotificationsRoute = ManagerNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => ManagerRouteRoute,
+} as any)
 const ManagerLeaveApplicationsRoute =
   ManagerLeaveApplicationsRouteImport.update({
     id: '/leave-applications',
@@ -87,6 +94,12 @@ const ManagerEditMyProfileRoute = ManagerEditMyProfileRouteImport.update({
   path: '/edit-my-profile',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
+const ManagerApproveApplicationRoute =
+  ManagerApproveApplicationRouteImport.update({
+    id: '/approve-application',
+    path: '/approve-application',
+    getParentRoute: () => ManagerRouteRoute,
+  } as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -118,8 +131,10 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/auth/passreset': typeof AuthPassresetRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/manager/approve-application': typeof ManagerApproveApplicationRoute
   '/manager/edit-my-profile': typeof ManagerEditMyProfileRoute
   '/manager/leave-applications': typeof ManagerLeaveApplicationsRoute
+  '/manager/notifications': typeof ManagerNotificationsRoute
   '/manager/promote': typeof ManagerPromoteRoute
   '/setup/employee-profile': typeof SetupEmployeeProfileRoute
   '/setup/manager-profile': typeof SetupManagerProfileRoute
@@ -135,8 +150,10 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/passreset': typeof AuthPassresetRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/manager/approve-application': typeof ManagerApproveApplicationRoute
   '/manager/edit-my-profile': typeof ManagerEditMyProfileRoute
   '/manager/leave-applications': typeof ManagerLeaveApplicationsRoute
+  '/manager/notifications': typeof ManagerNotificationsRoute
   '/manager/promote': typeof ManagerPromoteRoute
   '/setup/employee-profile': typeof SetupEmployeeProfileRoute
   '/setup/manager-profile': typeof SetupManagerProfileRoute
@@ -154,8 +171,10 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/passreset': typeof AuthPassresetRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/manager/approve-application': typeof ManagerApproveApplicationRoute
   '/manager/edit-my-profile': typeof ManagerEditMyProfileRoute
   '/manager/leave-applications': typeof ManagerLeaveApplicationsRoute
+  '/manager/notifications': typeof ManagerNotificationsRoute
   '/manager/promote': typeof ManagerPromoteRoute
   '/setup/employee-profile': typeof SetupEmployeeProfileRoute
   '/setup/manager-profile': typeof SetupManagerProfileRoute
@@ -174,8 +193,10 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/passreset'
     | '/auth/signup'
+    | '/manager/approve-application'
     | '/manager/edit-my-profile'
     | '/manager/leave-applications'
+    | '/manager/notifications'
     | '/manager/promote'
     | '/setup/employee-profile'
     | '/setup/manager-profile'
@@ -191,8 +212,10 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/passreset'
     | '/auth/signup'
+    | '/manager/approve-application'
     | '/manager/edit-my-profile'
     | '/manager/leave-applications'
+    | '/manager/notifications'
     | '/manager/promote'
     | '/setup/employee-profile'
     | '/setup/manager-profile'
@@ -209,8 +232,10 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/passreset'
     | '/auth/signup'
+    | '/manager/approve-application'
     | '/manager/edit-my-profile'
     | '/manager/leave-applications'
+    | '/manager/notifications'
     | '/manager/promote'
     | '/setup/employee-profile'
     | '/setup/manager-profile'
@@ -299,6 +324,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerPromoteRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
+    '/manager/notifications': {
+      id: '/manager/notifications'
+      path: '/notifications'
+      fullPath: '/manager/notifications'
+      preLoaderRoute: typeof ManagerNotificationsRouteImport
+      parentRoute: typeof ManagerRouteRoute
+    }
     '/manager/leave-applications': {
       id: '/manager/leave-applications'
       path: '/leave-applications'
@@ -311,6 +343,13 @@ declare module '@tanstack/react-router' {
       path: '/edit-my-profile'
       fullPath: '/manager/edit-my-profile'
       preLoaderRoute: typeof ManagerEditMyProfileRouteImport
+      parentRoute: typeof ManagerRouteRoute
+    }
+    '/manager/approve-application': {
+      id: '/manager/approve-application'
+      path: '/approve-application'
+      fullPath: '/manager/approve-application'
+      preLoaderRoute: typeof ManagerApproveApplicationRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
     '/auth/signup': {
@@ -361,16 +400,20 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface ManagerRouteRouteChildren {
+  ManagerApproveApplicationRoute: typeof ManagerApproveApplicationRoute
   ManagerEditMyProfileRoute: typeof ManagerEditMyProfileRoute
   ManagerLeaveApplicationsRoute: typeof ManagerLeaveApplicationsRoute
+  ManagerNotificationsRoute: typeof ManagerNotificationsRoute
   ManagerPromoteRoute: typeof ManagerPromoteRoute
   ManagerIndexRoute: typeof ManagerIndexRoute
   ManagerEmployeeNameRoute: typeof ManagerEmployeeNameRoute
 }
 
 const ManagerRouteRouteChildren: ManagerRouteRouteChildren = {
+  ManagerApproveApplicationRoute: ManagerApproveApplicationRoute,
   ManagerEditMyProfileRoute: ManagerEditMyProfileRoute,
   ManagerLeaveApplicationsRoute: ManagerLeaveApplicationsRoute,
+  ManagerNotificationsRoute: ManagerNotificationsRoute,
   ManagerPromoteRoute: ManagerPromoteRoute,
   ManagerIndexRoute: ManagerIndexRoute,
   ManagerEmployeeNameRoute: ManagerEmployeeNameRoute,

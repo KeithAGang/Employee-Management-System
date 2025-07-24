@@ -9,6 +9,11 @@ namespace backend.Dtos
         LeaveStatus Status,
         Guid? ApplicationId
     );
+     public record LeaveAppDto(
+        DateTime StartDate,
+        DateTime EndDate,
+        string Reason
+    );
 
     public record ApproveLeaveApplicationDto(
         Guid ApplicationId,

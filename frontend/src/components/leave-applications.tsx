@@ -30,7 +30,7 @@ export function ManagerAllLeaveApplications() {
 
   const { mutate: approveLeave, isPending: isApproving } = useMutation<any, Error, LeaveApplicationIdDto>({
     mutationFn: async (payload) => {
-      const response = await axios.put(`${API_BASE_URL}/manager/approve-leave`, payload, {
+      const response = await axios.put(`${API_BASE_URL}/manager/approve-leave`, {"applicationId": payload}, {
         withCredentials: true,
       });
       return response.data;
@@ -71,8 +71,8 @@ export function ManagerAllLeaveApplications() {
   }
 
   return (
-    <div className="flex w-full p-2">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="flex w-full justify-center p-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
         {allLeaveApplications.map((app) => {
           let cardBgColor = 'bg-gray-50'; // Default
           let cardBorderColor = 'border-gray-200';
@@ -151,16 +151,6 @@ export function ManagerAllLeaveApplications() {
                     {app.status}
                   </span>
                 </div>
-                {app.status === 'Pending' && ( // Only show button for Pending status
-                  <Button
-                    onClick={() => handleApprove(app.applicationId)}
-                    className="w-full mt-4"
-                    variant={buttonVariant}
-                    disabled={buttonDisabled}
-                  >
-                    {buttonText}
-                  </Button>
-                )}
               </CardContent>
             </Card>
           );

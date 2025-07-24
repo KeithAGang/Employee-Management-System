@@ -95,14 +95,15 @@ namespace backend.Services
 
         }
 
-        public async Task ApplyForLeaveAsync(Guid userId, LeaveApplicationDto leaveApplicationDto)
+        public async Task ApplyForLeaveAsync(Guid userId, LeaveAppDto leaveApplicationDto)
         {
             var employee = await _dbContext.Employees
                 .Include(e => e.User)
                 .Include(e => e.Manager)
+                .Include(e => e.Manager!.User)
                 .FirstOrDefaultAsync(e => e.UserId == userId) ?? throw new UserNotFoundException();
 
-            if (employee.Manager!.User == null)
+            if (employee.Manager?.User == null)
             {
                 throw new InvalidOperationException("Employee does not have a manager assigned.");
             }

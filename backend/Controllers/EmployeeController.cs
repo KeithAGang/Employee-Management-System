@@ -88,7 +88,7 @@ namespace backend.Controllers
 
         [HttpPost("apply-for-leave")]
         [Authorize(Roles = "Employee")]
-        public async Task<IActionResult> ApplyForLeave(LeaveApplicationDto request)
+        public async Task<IActionResult> ApplyForLeave(LeaveAppDto request)
         {
             try
             {
