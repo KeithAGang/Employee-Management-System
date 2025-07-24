@@ -8,12 +8,12 @@ export const useManagerProfile = () => {
   return useQuery<ManagerProfileDto, Error>({
     queryKey: ['managerProfile'], // Unique key for caching this data
     queryFn: async () => {
-      const response = await axios.get<ManagerProfileDto>(`${API_BASE_URL}/manager/get-profile`, {
+      const response = await axios.get<ManagerProfileDto>(`${API_BASE_URL}/Manager/get-profile`, {
         withCredentials: true, // Send the HttpOnly cookie
       });
       return response.data;
     },
-    staleTime: 5 * 60 * 1000,
+    staleTime: 15 * 60 * 1000,
     // cacheTime: 10 * 60 * 1000, // Default is 5 minutes, keep data in cache for 10 minutes after inactive
     refetchOnWindowFocus: false,
     refetchOnMount: true,

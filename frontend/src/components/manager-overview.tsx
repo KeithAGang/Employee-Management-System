@@ -65,6 +65,11 @@ export function ManagerOverviewPage() {
           </div>
           <Separator className="bg-gray-200" />
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+            <span className="font-medium">Office Location:</span>
+            <span>{managerProfile.officeLocation === "" ? "Not Specified" : managerProfile.officeLocation}</span>
+          </div>
+          <Separator className="bg-gray-200" />
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
             <span className="font-medium">Status:</span>
             <span>{managerProfile.isActive ? "Active" : "Inactive"}</span>
           </div>

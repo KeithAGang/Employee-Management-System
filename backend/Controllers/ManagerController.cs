@@ -105,7 +105,7 @@ namespace backend.Controllers
             }
         }
 
-        [HttpPut("promoted-manager")]
+        [HttpPut("promote-manager")]
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> PromoteManagerProfile(string email)
         {
@@ -126,7 +126,7 @@ namespace backend.Controllers
             }
         }
 
-        [HttpPut("get-employee-profile")]
+        [HttpGet("get-employee-profile")]
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetEmployeeProfile(string email)
         {

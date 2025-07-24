@@ -44,9 +44,17 @@ namespace backend.Services
                 LastName: manager.User.LastName,
                 Email: manager.User.Email,
                 Department: manager.Department,
+                OfficeLocation: manager.OfficeLocation ?? "",
                 Subordinates: [.. manager.DirectReports.Select(e => new EmployeeShort(
                     FullName: e.User.FullName(),
-                    Email: e.User.Email
+                    Email: e.User.Email,
+                    LeaveApplications: [.. e.LeaveApplications.Select(la => new LeaveApplicationDto(
+                        la.StartDate,
+                        la.EndDate,
+                        la.Reason,
+                        la.Status,
+                        la.Id
+                    ))]
                 ))],
                 Notifications: await _dbContext.Notifications
                     .Where(n => n.RecipientId == manager.UserId)
@@ -80,13 +88,14 @@ namespace backend.Services
                 .ToArrayAsync();
 
             if (profiles.Length == 0)
-                throw new ManagerNotFoundException();
+                return [];
 
             return profiles.Select(profile => new ManagerProfileDto(
                 FirstName: profile.User.FirstName,
                 LastName: profile.User.LastName,
                 Email: profile.User.Email,
                 Department: profile.Department,
+                OfficeLocation: profile.OfficeLocation ?? "",
                 Subordinates: [],
                 Notifications: [],
                 IsActive: profile.IsActive
@@ -146,7 +155,8 @@ namespace backend.Services
                     ApplicationId: la.Id,
                     StartDate: la.StartDate,
                     EndDate: la.EndDate,
-                    Reason: la.Reason
+                    Reason: la.Reason,
+                    Status: la.Status
                 ))],
                 Notifications: [],
                 LeaveDaysTaken: subordinate.LeaveDaysTaken,
@@ -169,6 +179,7 @@ namespace backend.Services
                 .FirstOrDefault(la => la.Id == leaveApplicationDto.ApplicationId) ?? throw new LeaveApplicationNotFoundException();
 
             leaveApplication.Status = LeaveStatus.Approved;
+            subordinate.TotalLeaveDaysEntitled -= 1;
 
 
             var sendNotification = new SendNotificationDto(

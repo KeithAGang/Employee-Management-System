@@ -1,3 +1,5 @@
+using backend.Models;
+
 namespace backend.Dtos
 {
     public record ManagerProfileDto(
@@ -5,6 +7,7 @@ namespace backend.Dtos
         string LastName,
         string Email,
         string Department,
+        string OfficeLocation,
         ICollection<EmployeeShort> Subordinates,
         ICollection<SendNotificationDto>? Notifications,
         bool IsActive = true
@@ -12,7 +15,8 @@ namespace backend.Dtos
 
     public record EmployeeShort(
         string FullName,
-        string Email
+        string Email,
+        ICollection<LeaveApplicationDto> LeaveApplications
     );
 
      public record UpdateManagerProfileDto(

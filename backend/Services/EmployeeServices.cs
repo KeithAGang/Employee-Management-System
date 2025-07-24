@@ -68,6 +68,7 @@ namespace backend.Services
                         la.StartDate,
                         la.EndDate,
                         la.Reason,
+                        la.Status,
                         null
                     )).ToListAsync(),
                 Notifications: await _dbContext.Notifications

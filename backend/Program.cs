@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using backend.Data;
 using backend.Hubs;
 using backend.Services;
@@ -30,6 +31,8 @@ builder.Services.AddCors(options =>
             .AllowCredentials(); // Needed for cookies and SignalR
     });
 });
+
+
 
 
 // Configure Entity Framework Core with PostgreSQL
@@ -88,7 +91,11 @@ builder.Services.AddScoped<UserServices>();
 builder.Services.AddScoped<ManagerServices>();
 builder.Services.AddScoped<EmployeeServices>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

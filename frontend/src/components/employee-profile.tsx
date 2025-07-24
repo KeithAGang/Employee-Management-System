@@ -39,7 +39,7 @@ export const useSubordinateProfile = ({ subordinateEmail, enabled = true }: UseS
     queryKey: ['subordinateProfile', subordinateEmail],
     queryFn: async () => {
       const response = await axios.get<EmployeeProfileDto>(
-        `${API_BASE_URL}/manager/get-employee-profile?email=${subordinateEmail}`,
+        `${API_BASE_URL}/Manager/get-employee-profile?email=${subordinateEmail}`,
         {
           withCredentials: true,
         }
@@ -88,7 +88,7 @@ export function EmployeeProfileCard({ subordinateEmail }: EmployeeProfileCardPro
   };
 
   return (
-    <div className="space-y-8 p-4 sm:p-6 md:p-8 bg-white rounded-lg shadow-xl">
+    <div className="space-y-8 w-full p-4 sm:p-6 md:p-8 bg-white rounded-lg shadow-xl">
       <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6 text-center">Employee Profile: {employeeProfile.fullName}</h1>
 
       <Card className="bg-white border border-gray-200 shadow-sm">

@@ -1,6 +1,7 @@
 export interface EmployeeShort {
   fullName: string;
   email: string;
+  leaveApplications: LeaveApplicationDto[];
 }
 
 export interface NotificationDto {
@@ -13,6 +14,7 @@ export interface ManagerProfileDto {
   lastName: string;
   email: string;
   department: string;
+  officeLocation: string;
   subordinates: EmployeeShort[];
   notifications: NotificationDto[];
   isActive: boolean;
@@ -23,6 +25,7 @@ export interface LeaveApplicationDto {
   startDate: string;
   endDate: string;
   reason: string;
+  status: string;
 }
 
 export interface EmployeeProfileDto {
@@ -37,4 +40,15 @@ export interface EmployeeProfileDto {
   notifications: any[]; // As per your backend DTO, this is an empty array here
   leaveDaysTaken: number;
   totalLeaveDays: number;
+}
+
+export interface UpdateManagerProfileDto {
+  firstName?: string | null;
+  lastName?: string | null;
+  department?: string | null;
+  officeLocation?: string | null;
+}
+
+export interface LeaveApplicationIdDto {
+  applicationId: string;
 }

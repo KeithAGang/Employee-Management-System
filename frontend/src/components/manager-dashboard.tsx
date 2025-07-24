@@ -1,5 +1,6 @@
 import * as React from "react"
 import { GalleryVerticalEnd } from "lucide-react"
+import { Link } from "@tanstack/react-router"
 
 import {
   Sidebar,
@@ -15,59 +16,59 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 
-// This is sample data.
+// Example route paths, replace with your actual route objects/paths
 const data = {
   navMain: [
     {
       title: "Employees",
-      url: "#",
+      to: "/employees",
       items: [
         {
           title: "Leave Applications",
-          url: "#",
+          to: "/manager/leave-applications",
           isActive: false,
         },
       ],
     },
     {
       title: "Manager",
-      url: "#",
+      to: "/manager",
       items: [
         {
-          title: "My Profile",
-          url: "#",
+          title: "Update My Profile",
+          to: "/manager/edit-my-profile",
           isActive: false,
         },
         {
           title: "Promote Managers",
-          url: "#",
+          to: "/manager/promote",
           isActive: false,
         },
       ],
     },
     {
       title: "Notifications",
-      url: "#",
+      to: "/notifications",
       items: [
         {
           title: "Read",
-          url: "#",
+          to: "/notifications/read",
           isActive: false,
         },
         {
           title: "Unread",
-          url: "#",
+          to: "/notifications/unread",
           isActive: false,
         },
       ],
     },
     {
       title: "Reports",
-      url: "#",
+      to: "/reports",
       items: [
         {
           title: "All",
-          url: "#",
+          to: "/reports/all",
           isActive: false,
         },
       ],
@@ -82,7 +83,7 @@ export function ManagerDashboard({ ...props }: React.ComponentProps<typeof Sideb
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <Link to="/manager">
                 <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <GalleryVerticalEnd className="size-4" />
                 </div>
@@ -90,7 +91,7 @@ export function ManagerDashboard({ ...props }: React.ComponentProps<typeof Sideb
                   <span className="font-medium">Manager DashBoard</span>
                   <span className="">v1.0.0</span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -101,16 +102,16 @@ export function ManagerDashboard({ ...props }: React.ComponentProps<typeof Sideb
             {data.navMain.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
-                  <a href={item.url} className="font-medium">
+                  <Link to={item.to} className="font-medium">
                     {item.title}
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
                 {item.items?.length ? (
                   <SidebarMenuSub>
-                    {item.items.map((item) => (
-                      <SidebarMenuSubItem key={item.title}>
-                        <SidebarMenuSubButton asChild isActive={item.isActive}>
-                          <a href={item.url}>{item.title}</a>
+                    {item.items.map((subItem) => (
+                      <SidebarMenuSubItem key={subItem.title}>
+                        <SidebarMenuSubButton asChild isActive={subItem.isActive}>
+                          <Link to={subItem.to}>{subItem.title}</Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}
