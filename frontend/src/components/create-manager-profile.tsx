@@ -78,11 +78,24 @@ export function CreateManagerProfileForm({
       }, 900);
     },
     onError: (err) => {
-      if (axios.isAxiosError(err) && err.response?.data?.message) {
-        if (err.response.data.message.includes("User not found")) {
+      if (axios.isAxiosError(err)) {
+        const status = err.response?.status;
+        const message = err.response?.data?.message;
+
+        if (message?.includes("User not found")) {
           setError("root.serverError", { type: "manual", message: "Authenticated user not found." });
+        } else if (message) {
+          setError("root.serverError", { type: "manual", message });
+        } else if (status === 401) {
+          setError("root.serverError", { type: "manual", message: "Unauthorized. Please log in again." });
+        } else if (status === 403) {
+          setError("root.serverError", { type: "manual", message: "Forbidden. You do not have permission." });
+        } else if (status === 500) {
+          setError("root.serverError", { type: "manual", message: "Server error. Please try again later." });
+        } else if (status) {
+          setError("root.serverError", { type: "manual", message: `Request failed with status ${status}.` });
         } else {
-          setError("root.serverError", { type: "manual", message: err.response.data.message });
+          setError("root.serverError", { type: "manual", message: err.message });
         }
       } else if (err instanceof Error) {
         setError("root.serverError", { type: "manual", message: err.message });

@@ -1,88 +1,146 @@
-import * as React from "react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Link } from "@tanstack/react-router"
-import { useState } from "react"
-import { useMutation } from "@tanstack/react-query"
-import { useNavigate } from "@tanstack/react-router"
-import axios from "axios"
-import { useAuthStore } from "@/store/authStore"
+import * as React from "react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Link } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import axios from "axios";
+import { useAuthStore } from "@/store/authStore";
 
-interface LoginRequestDto {
-  email: string;
-  password: string;
-}
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+// Define Zod schema for login form validation
+const loginSchema = z.object({
+  email: z
+    .string()
+    .email("Invalid email address.")
+    .min(1, "Email is required."),
+  password: z.string().min(1, "Password is required."),
+});
+
+// Infer form data type from schema
+type LoginFormData = z.infer<typeof loginSchema>;
 
 interface LoginResponseDto {
   fullName: string;
   role: string;
 }
 
-const API_BASE_URL = 'https://localhost:7026/api';
+const API_BASE_URL = "https://localhost:7026/api";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const setAuth = useAuthStore((state) => state.setAuth);
 
+  // Initialize react-hook-form
   const {
-    mutate,
-    isPending,
-    isError,
-    error,
-  } = useMutation<LoginResponseDto, Error, LoginRequestDto>({
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError, // setError is now correctly destructured from useForm
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema), // Use Zod for validation
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const { mutate, isPending, isError, error } = useMutation<
+    LoginResponseDto,
+    Error,
+    LoginFormData
+  >({
     mutationFn: async (credentials) => {
-      const response = await axios.post(`${API_BASE_URL}/user/login`, credentials, {
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        `${API_BASE_URL}/user/login`,
+        credentials,
+        {
+          withCredentials: true,
+        }
+      );
       return response.data;
     },
     onSuccess: (data) => {
-      setAuth(
-        data.fullName, // First argument: fullName
-        data.role      // Second argument: role
-      );
+      setAuth(data.fullName, data.role);
 
-      if (data.role === 'Manager') {
-      //   navigate({ to: '/manager/overview' });
-      // } else if (data.role === 'Employee') {
-      //   navigate({ to: '/employee/overview' });
-        setTimeout(() => {
-        navigate({ to: '/manager' });
-      }, 900)
-
-      } else {
-        setTimeout(() => {
-        navigate({ to: '/' });
-      }, 900)
-      }
+      setTimeout(() => {
+        if (data.role === "Manager") {
+          setTimeout(() => {
+            navigate({ to: "/manager" });
+          }, 900);
+        } else if (data.role === "Employee") {
+          setTimeout(() => {
+            navigate({ to: "/" });
+          }, 900);
+        } else {
+          setTimeout(() => {
+            navigate({ to: "/" });
+          }, 900);
+        }
+      }, 900);
     },
     onError: (err) => {
-      if (axios.isAxiosError(err) && err.response?.data?.message) {
-        throw new Error(err.response.data.message);
+      if (axios.isAxiosError(err)) {
+        const status = err.response?.status;
+        const message = err.response?.data?.message;
+
+        if (status === 401) {
+          setError("root.serverError", {
+            type: "manual",
+            message: "Invalid credentials. Please try again.",
+          });
+        } else if (status === 403) {
+          setError("root.serverError", {
+            type: "manual",
+            message: "Access denied. You do not have permission.",
+          });
+        } else if (message) {
+          // Use the message from the backend if available
+          setError("root.serverError", { type: "manual", message });
+        } else if (status === 500) {
+          setError("root.serverError", {
+            type: "manual",
+            message: "Server error. Please try again later.",
+          });
+        } else if (status) {
+          // Fallback for other HTTP statuses
+          setError("root.serverError", {
+            type: "manual",
+            message: `Request failed with status ${status}.`,
+          });
+        } else {
+          // Network error or no response
+          setError("root.serverError", {
+            type: "manual",
+            message:
+              err.message || "Network error. Please check your connection.",
+          });
+        }
       } else if (err instanceof Error) {
-        throw err;
+        // Generic JavaScript error
+        setError("root.serverError", { type: "manual", message: err.message });
       } else {
-        throw new Error('An unknown error occurred during login.');
+        // Catch-all for unknown errors
+        setError("root.serverError", {
+          type: "manual",
+          message: "An unknown error occurred during login.",
+        });
       }
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    mutate({ email, password });
+  // onSubmit function for react-hook-form
+  const onSubmit = (data: LoginFormData) => {
+    mutate({ email: data.email, password: data.password });
   };
 
   return (
@@ -92,7 +150,7 @@ export function LoginForm({
           <CardTitle className="text-xl">Welcome back</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid gap-6">
               <div className="grid gap-6">
                 <div className="grid gap-3">
@@ -101,10 +159,13 @@ export function LoginForm({
                     id="email"
                     type="email"
                     placeholder="m@example.com"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    {...register("email")}
                   />
+                  {errors.email && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
                 <div className="grid gap-3">
                   <div className="flex items-center">
@@ -119,27 +180,33 @@ export function LoginForm({
                   <Input
                     id="password"
                     type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    {...register("password")}
                   />
+                  {errors.password && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.password.message}
+                    </p>
+                  )}
                 </div>
                 <Button
                   type="submit"
                   className="w-full bg-black text-white"
-                  disabled={isPending}
+                  disabled={isPending || isSubmitting} // Disable during submission or pending mutation
                 >
                   {isPending ? "Logging in..." : "Login"}
                 </Button>
-                {isError && (
+                {errors.root?.serverError && (
                   <p className="text-red-500 text-sm text-center mt-2">
-                    {error?.message || "Login failed. Please try again."}
+                    {errors.root.serverError.message}
                   </p>
                 )}
               </div>
               <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}
-                <Link to="/auth/signup" className="decoration-1 underline hover:cursor-pointer">
+                <Link
+                  to="/auth/signup"
+                  className="decoration-1 underline hover:cursor-pointer"
+                >
                   Sign up
                 </Link>
               </div>
@@ -148,5 +215,5 @@ export function LoginForm({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

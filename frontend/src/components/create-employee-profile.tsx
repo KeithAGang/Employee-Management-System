@@ -80,14 +80,26 @@ export function CreateEmployeeProfileForm({
       }, 900)
     },
     onError: (err) => {
-      if (axios.isAxiosError(err) && err.response?.data?.message) {
-        // Handle specific backend errors
-        if (err.response.data.message.includes("User not found")) {
+      if (axios.isAxiosError(err)) {
+        const status = err.response?.status;
+        const message = err.response?.data?.message;
+
+        if (status === 401) {
+          setError("root.serverError", { type: "manual", message: "Unauthorized. Please log in." });
+        } else if (status === 403) {
+          setError("root.serverError", { type: "manual", message: "You do not have permission to perform this action." });
+        } else if (message?.includes("User not found")) {
           setError("root.serverError", { type: "manual", message: "Authenticated user not found." });
-        } else if (err.response.data.message.includes("Manager not found")) {
+        } else if (message?.includes("Manager not found")) {
           setError("managerEmail", { type: "manual", message: "Manager email not found or invalid." });
+        } else if (message) {
+          setError("root.serverError", { type: "manual", message });
+        } else if (status === 500) {
+          setError("root.serverError", { type: "manual", message: "Server error. Please try again later." });
+        } else if (status) {
+          setError("root.serverError", { type: "manual", message: `Request failed with status ${status}.` });
         } else {
-          setError("root.serverError", { type: "manual", message: err.response.data.message });
+          setError("root.serverError", { type: "manual", message: err.message });
         }
       } else if (err instanceof Error) {
         setError("root.serverError", { type: "manual", message: err.message });

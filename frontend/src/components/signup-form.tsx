@@ -88,11 +88,24 @@ export function SignUpForm({
       }, 900)
     },
     onError: (err) => {
-      if (axios.isAxiosError(err) && err.response?.data?.message) {
-        if (err.response.data.message.includes("email already exists")) {
+      if (axios.isAxiosError(err)) {
+        const status = err.response?.status;
+        const message = err.response?.data?.message;
+
+        if (status === 401) {
+          setError("root.serverError", { type: "manual", message: "Unauthorized. Please log in." });
+        } else if (status === 403) {
+          setError("root.serverError", { type: "manual", message: "You do not have permission to perform this action." });
+        } else if (message?.includes("email already exists")) {
           setError("email", { type: "manual", message: "This email is already registered." });
+        } else if (message) {
+          setError("root.serverError", { type: "manual", message });
+        } else if (status === 500) {
+          setError("root.serverError", { type: "manual", message: "Server error. Please try again later." });
+        } else if (status) {
+          setError("root.serverError", { type: "manual", message: `Request failed with status ${status}.` });
         } else {
-          setError("root.serverError", { type: "manual", message: err.response.data.message });
+          setError("root.serverError", { type: "manual", message: err.message });
         }
       } else if (err instanceof Error) {
         setError("root.serverError", { type: "manual", message: err.message });
