@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as SetupRouteRouteImport } from './routes/setup/route'
 import { Route as ManagerRouteRouteImport } from './routes/manager/route'
@@ -20,7 +21,13 @@ import { Route as SetupEmployeeProfileRouteImport } from './routes/setup/employe
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthPassresetRouteImport } from './routes/auth/passreset'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as ManagerEmployeeNameRouteImport } from './routes/manager/employee/$name'
 
+const UnauthorizedRoute = UnauthorizedRouteImport.update({
+  id: '/unauthorized',
+  path: '/unauthorized',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -76,6 +83,11 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const ManagerEmployeeNameRoute = ManagerEmployeeNameRouteImport.update({
+  id: '/employee/$name',
+  path: '/employee/$name',
+  getParentRoute: () => ManagerRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -83,24 +95,28 @@ export interface FileRoutesByFullPath {
   '/manager': typeof ManagerRouteRouteWithChildren
   '/setup': typeof SetupRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/passreset': typeof AuthPassresetRoute
   '/auth/signup': typeof AuthSignupRoute
   '/setup/employee-profile': typeof SetupEmployeeProfileRoute
   '/setup/manager-profile': typeof SetupManagerProfileRoute
   '/manager/': typeof ManagerIndexRoute
+  '/manager/employee/$name': typeof ManagerEmployeeNameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/setup': typeof SetupRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/passreset': typeof AuthPassresetRoute
   '/auth/signup': typeof AuthSignupRoute
   '/setup/employee-profile': typeof SetupEmployeeProfileRoute
   '/setup/manager-profile': typeof SetupManagerProfileRoute
   '/manager': typeof ManagerIndexRoute
+  '/manager/employee/$name': typeof ManagerEmployeeNameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -109,12 +125,14 @@ export interface FileRoutesById {
   '/manager': typeof ManagerRouteRouteWithChildren
   '/setup': typeof SetupRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/passreset': typeof AuthPassresetRoute
   '/auth/signup': typeof AuthSignupRoute
   '/setup/employee-profile': typeof SetupEmployeeProfileRoute
   '/setup/manager-profile': typeof SetupManagerProfileRoute
   '/manager/': typeof ManagerIndexRoute
+  '/manager/employee/$name': typeof ManagerEmployeeNameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -124,24 +142,28 @@ export interface FileRouteTypes {
     | '/manager'
     | '/setup'
     | '/about'
+    | '/unauthorized'
     | '/auth/login'
     | '/auth/passreset'
     | '/auth/signup'
     | '/setup/employee-profile'
     | '/setup/manager-profile'
     | '/manager/'
+    | '/manager/employee/$name'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/setup'
     | '/about'
+    | '/unauthorized'
     | '/auth/login'
     | '/auth/passreset'
     | '/auth/signup'
     | '/setup/employee-profile'
     | '/setup/manager-profile'
     | '/manager'
+    | '/manager/employee/$name'
   id:
     | '__root__'
     | '/'
@@ -149,12 +171,14 @@ export interface FileRouteTypes {
     | '/manager'
     | '/setup'
     | '/about'
+    | '/unauthorized'
     | '/auth/login'
     | '/auth/passreset'
     | '/auth/signup'
     | '/setup/employee-profile'
     | '/setup/manager-profile'
     | '/manager/'
+    | '/manager/employee/$name'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -163,10 +187,18 @@ export interface RootRouteChildren {
   ManagerRouteRoute: typeof ManagerRouteRouteWithChildren
   SetupRouteRoute: typeof SetupRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  UnauthorizedRoute: typeof UnauthorizedRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/unauthorized': {
+      id: '/unauthorized'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof UnauthorizedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -244,6 +276,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/manager/employee/$name': {
+      id: '/manager/employee/$name'
+      path: '/employee/$name'
+      fullPath: '/manager/employee/$name'
+      preLoaderRoute: typeof ManagerEmployeeNameRouteImport
+      parentRoute: typeof ManagerRouteRoute
+    }
   }
 }
 
@@ -265,10 +304,12 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 interface ManagerRouteRouteChildren {
   ManagerIndexRoute: typeof ManagerIndexRoute
+  ManagerEmployeeNameRoute: typeof ManagerEmployeeNameRoute
 }
 
 const ManagerRouteRouteChildren: ManagerRouteRouteChildren = {
   ManagerIndexRoute: ManagerIndexRoute,
+  ManagerEmployeeNameRoute: ManagerEmployeeNameRoute,
 }
 
 const ManagerRouteRouteWithChildren = ManagerRouteRoute._addFileChildren(
@@ -295,6 +336,7 @@ const rootRouteChildren: RootRouteChildren = {
   ManagerRouteRoute: ManagerRouteRouteWithChildren,
   SetupRouteRoute: SetupRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  UnauthorizedRoute: UnauthorizedRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

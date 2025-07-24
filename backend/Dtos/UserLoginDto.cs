@@ -7,6 +7,7 @@ namespace backend.Dtos
 
     public record UserLoginResponseDto(
         string FullName,
+        string Email,
         string Role
     );
 }

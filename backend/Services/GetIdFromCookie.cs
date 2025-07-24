@@ -26,5 +26,24 @@ namespace backend.Services
 
             return userIdGuid;
         }
+        public DateTime GetTokenExpiry()
+        {
+            var expClaim = _httpContextAccessor.HttpContext?.User.FindFirst(JwtRegisteredClaimNames.Exp)?.Value;
+
+            if (expClaim == null)
+            {
+            _logger.LogError("Token expiry (exp) claim not found in the request.");
+            throw new Exception("Token expiry claim is missing.");
+            }
+
+            if (!long.TryParse(expClaim, out var expMinutes))
+            {
+            _logger.LogError("Invalid expiry claim value: {Exp}", expClaim);
+            throw new Exception("Invalid expiry claim.");
+            }
+
+            var expiryDateTime = DateTimeOffset.FromUnixTimeSeconds(expMinutes * 60).UtcDateTime;
+            return expiryDateTime;
+        }
     }
 }

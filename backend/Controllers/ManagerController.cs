@@ -141,6 +141,11 @@ namespace backend.Controllers
                 _logger.LogError(ex, "Managers not found.");
                 return NotFound(new { message = "No Unpromoted Managers Found." });
             }
+            catch (UserNotFoundException ex)
+            {
+                _logger.LogError(ex, "Subordinate Not Found");
+                return NotFound(new { message = "Subordinate Not Found!" });
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while creating the manager profile.");

@@ -1,21 +1,25 @@
-// src/routes/manager.tsx (or wherever your ManagerLayout is defined)
 import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar"; // Ensure correct import path
+import { ManagerDashboard } from "@/components/manager-dashboard";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { ensureRole } from "@/utils/authGuard";
+import { checkCurrentUserSession } from "@/utils/checkAuth";
 
 
 export const Route = createFileRoute("/manager")({
+  beforeLoad: async ({}) => {
+   await checkCurrentUserSession();
+    ensureRole("Manager");
+  },
   component: ManagerLayout,
 });
 
 function ManagerLayout() {
   return (
-    // Use a flex container to arrange sidebar and main content horizontally
     <SidebarProvider>
-      <AppSidebar />
+      <ManagerDashboard />
       <SidebarInset>
         <main className="flex p-4">
           <Outlet />

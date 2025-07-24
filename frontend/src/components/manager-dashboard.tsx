@@ -23,11 +23,6 @@ const data = {
       url: "#",
       items: [
         {
-          title: "All",
-          url: "#",
-          isActive: false,
-        },
-        {
           title: "Leave Applications",
           url: "#",
           isActive: false,
@@ -80,7 +75,7 @@ const data = {
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function ManagerDashboard({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>

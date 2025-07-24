@@ -28,6 +28,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 interface LoginResponseDto {
   fullName: string;
+  email: string;
   role: string;
 }
 
@@ -70,7 +71,7 @@ export function LoginForm({
       return response.data;
     },
     onSuccess: (data) => {
-      setAuth(data.fullName, data.role);
+      setAuth(data.fullName, data.email, data.role);
 
       setTimeout(() => {
         if (data.role === "Manager") {

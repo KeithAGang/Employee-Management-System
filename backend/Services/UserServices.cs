@@ -41,7 +41,7 @@ namespace backend.Services
             var refreshToken = _authTokenProcessor.GenerateRefreshToken();
 
             user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = exptime;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddHours(2);
 
             _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("ACCESS_TOKEN", token, exptime);
             _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("REFRESH_TOKEN", refreshToken, exptime);
@@ -85,10 +85,11 @@ namespace backend.Services
 
             return new UserLoginResponseDto(
                 user.FullName(),
+                user.Email,
                 role
             );
         }
-        
+
         public async Task ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
         {
             var user = await _dbContext.Users
@@ -110,6 +111,39 @@ namespace backend.Services
             user.PasswordHash = passwordHash;
 
             await _dbContext.SaveChangesAsync();
+        }
+
+
+        public async Task<UserLoginResponseDto> CheckMe(Guid userId)
+        {
+            var user = await _dbContext.Users
+                .Include(u => u.ManagerProfile)
+                .Include(u => u.EmployeeProfile)
+                .FirstOrDefaultAsync(u => u.Id == userId) ?? throw new UserDetailsException();
+
+
+            var (token, exptime) = _authTokenProcessor.GenerateJwtToken(user);
+            var refreshToken = _authTokenProcessor.GenerateRefreshToken();
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddHours(2);
+
+            await _dbContext.SaveChangesAsync();
+
+            _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("ACCESS_TOKEN", token, exptime);
+            _authTokenProcessor.WriteAuthTokenAsHttpOnlyCookie("REFRESH_TOKEN", refreshToken, exptime);
+
+            string role = user.ManagerProfile != null ? "Manager"
+                : user.EmployeeProfile != null ? "Employee"
+                : "User"; // fallback/default
+
+            _logger.LogInformation($"User {user.Email} logged in with role {role}");
+
+            return new UserLoginResponseDto(
+                user.FullName(),
+                user.Email,
+                role
+            );
         }
     }
 }

@@ -132,7 +132,7 @@ namespace backend.Services
                 .FirstOrDefaultAsync(m => m.UserId == managerId) ?? throw new UserNotFoundException();
 
             var subordinate = manager.DirectReports
-                .FirstOrDefault(e => e.User.Email == subordinateEmail) ?? throw new Exception("Subordinate not found");
+                .FirstOrDefault(e => e.User.Email == subordinateEmail) ?? throw new UserNotFoundException();
 
             return new EmployeeProfileDto(
                 FullName: subordinate.User.FullName(),
