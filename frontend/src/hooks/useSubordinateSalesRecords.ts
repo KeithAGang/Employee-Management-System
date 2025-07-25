@@ -8,7 +8,7 @@ export const useSubordinateSalesRecords = () => {
   return useQuery<GetSalesDtoEx[], Error>({
     queryKey: ['subordinateSalesRecords'],
     queryFn: async () => {
-      const response = await axios.get<GetSalesDtoEx[]>(`${API_BASE_URL}/manager/get-sales-records`, {
+      const response = await axios.get<GetSalesDtoEx[]>(`${API_BASE_URL}/manager/get-sales-record`, {
         withCredentials: true,
       });
       return response.data;
