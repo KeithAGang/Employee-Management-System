@@ -22,7 +22,7 @@ namespace backend.Data
                                                        // Or for development/testing: await context.Database.EnsureCreatedAsync();
 
                 // Check if a manager with the default email already exists
-                if (await context.Users.AnyAsync(u => u.Email == "manager@corpinc.com"))
+                if (await context.Users.AnyAsync(u => u.Email == "manager@firm.com"))
                 {
                     Console.WriteLine("Default manager user already exists. Skipping seeding.");
                     return;

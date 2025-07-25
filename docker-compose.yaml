@@ -1,5 +1,5 @@
 services:
-  # PostgreSQL Database Service
+  # PostgreSQL service
   postgres:
     image: postgres:15
     container_name: ems_postgres
@@ -9,72 +9,41 @@ services:
       POSTGRES_PASSWORD: ems_password
       POSTGRES_DB: ems_db
     volumes:
-      # Persist PostgreSQL data to a named volume
       - pgdata:/var/lib/postgresql/data
     ports:
-      # Expose PostgreSQL port to the host
-      - "5432:5432"
+      - "6543:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ems_user -d ems_db"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-  # ASP.NET Core Web API Backend Service
+  # ASP.NET Core backend
   backend:
     build:
-      context: ./backend # Path to your backend project folder containing the Dockerfile
-      dockerfile: Dockerfile # Name of the Dockerfile in the backend folder
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: ems_backend
-    # Ensure the backend service starts only after postgres is healthy
     depends_on:
       postgres:
         condition: service_healthy
     environment:
-      # Database connection string for the backend.
-      # 'postgres' is the service name defined above in docker-compose.
-      # Ensure this matches the connection string used in your appsettings.json or Program.cs
       ConnectionStrings__PGConnection: "Host=postgres;Port=5432;Database=ems_db;Username=ems_user;Password=ems_password"
-      # Set ASP.NET Core environment for production (or Development if preferred for local dev)
-      ASPNETCORE_ENVIRONMENT: Development # Use Development for local debugging and dev certs
-      # ASP.NET Core Kestrel URL for HTTPS.
-      # Ensure your ASP.NET Core app is configured to handle HTTPS on this port.
+      ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: "https://+*:7026"
-      # For HTTPS, you might need to mount a certificate and provide its password.
-      # Example (uncomment and adjust paths if you have a .pfx file):
-      # ASPNETCORE_Kestrel__Certificates__Default__Path: "/https/aspnetapp.pfx"
-      # ASPNETCORE_Kestrel__Certificates__Default__Password: "your_cert_password"
     ports:
-      # Map container port 7026 (HTTPS) to host port 7026
       - "7026:7026"
-    # volumes:
-      # Example for mounting a certificate (uncomment and adjust paths)
-      # - ./certs:/https:ro # Mount a 'certs' folder from your host into the container
-    entrypoint: >
-      /bin/bash -c "
-      echo 'Waiting for database to be ready...' &&
-      /usr/bin/env dotnet tool install --global dotnet-ef --version 8.* || true &&
-      /usr/bin/env dotnet ef database update --project backend.csproj --startup-project backend.csproj &&
-      echo 'Database migrations applied. Starting application...' &&
-      dotnet backend.dll
-      "
     restart: unless-stopped
 
-  # React Vite Frontend Service
+  # React Vite frontend
   frontend:
     build:
-      context: ./frontend # Path to your frontend project folder containing the Dockerfile
-      dockerfile: Dockerfile # Name of the Dockerfile in the frontend folder
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: ems_frontend
     ports:
-      # Map container port 5173 to host port 5173
       - "5173:5173"
-    # If your frontend needs the backend to be running to compile or for initial API calls,
-    # you might add depends_on here. For serving static files, it's often not strictly needed.
-    # depends_on:
-    #   - backend
     restart: unless-stopped
 
 volumes:
-  # Named volume for PostgreSQL data persistence
   pgdata:

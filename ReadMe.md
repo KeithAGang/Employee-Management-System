@@ -101,10 +101,11 @@ docker-compose up --build
 
 ## Development Notes
 
-- **Frontend configuration:** See [frontend/README.md](frontend/README.md)
-- **Backend configuration:** Update connection strings and secrets in `backend/appsettings.json`
-- **API base URL:** The frontend expects the backend at `https://localhost:7026/api`
-- **Default Manager** Email is `manager@firm.com` Password is `12345678`
+**Backend configuration:** Update connection strings and secrets in backend/appsettings.json. ⚠️ Note: The PostgreSQL port in appsettings.json is set to 6543 by default to avoid conflicts with local installations that might already use 5432.If you choose not to run PostgreSQL in Docker, you’ll need to manually change this port back to 5432 or match the port your local instance uses.
+
+**API base URL:** The frontend expects the backend at https://localhost:7026/api
+
+**Default Manager:** Email is manager@firm.com Password is 12345678
 
 ---
 
