@@ -111,7 +111,8 @@ docker-compose up --build
 
 ### ⚡ Windows (PowerShell or CMD)
 
-Note that you need mkcert on your system for this to work.
+Note that you need `mkcert` on your system for this to work.
+
 Open a terminal in the project root.
 
 Run:
