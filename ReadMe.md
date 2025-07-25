@@ -107,6 +107,107 @@ docker-compose up --build
 
 **Default Manager:** Email is manager@firm.com Password is 12345678
 
+## 🛠️ Running with Makefile
+
+### ⚡ Windows (PowerShell or CMD)
+
+Open a terminal in the project root.
+
+Run:
+
+```sh
+make dev
+```
+
+This will:
+
+* Generate HTTPS certificates via `generate-certs-win.bat`
+* Start Docker Compose with frontend, backend, and database
+
+---
+
+### 🐗 Unix/Linux/macOS
+
+Open a terminal in the project root.
+
+Run:
+
+```sh
+make dev
+```
+
+This will:
+
+* Generate HTTPS certificates via `generate-certs-unix.sh`
+* Start Docker Compose with frontend, backend, and database
+
+---
+
+### 🛨️ To stop services
+
+Run:
+
+```sh
+make down
+```
+
+---
+
+### 🧹 To clean certificates
+
+Run:
+
+```sh
+make clean-certs
+```
+
+---
+
+## 🚀 Running without Makefile
+
+If you prefer running manually:
+
+### 1. Generate certificates manually
+
+✅ **Windows:** Run the batch script
+
+```sh
+./generate-certs-win.bat
+```
+
+✅ **Unix/Linux/macOS:** Run the shell script
+
+```sh
+./generate-certs-unix.sh
+```
+
+---
+
+### 2. Start Docker Compose
+
+From project root:
+
+```sh
+docker-compose up --build
+```
+
+---
+
+## 🌐 Service Ports
+
+| Service                 | URL                                              | Notes                                        |
+| ----------------------- | ------------------------------------------------ | -------------------------------------------- |
+| **Frontend**            | [https://localhost:5173](https://localhost:5173) | React + Vite app served over HTTPS via nginx |
+| **Backend**             | [https://localhost:7026](https://localhost:7026) | ASP.NET Core Web API                         |
+| **Database (Postgres)** | localhost:6543                                   | Accessible via any Postgres client           |
+
+---
+
+### ⚠️ Notes
+
+* The frontend and backend both use HTTPS, ensure you accept local self-signed certificates in your browser for full functionality.
+* PostgreSQL is mapped to **port 6543** externally to avoid conflicts with local installations.
+
 ---
 
 ## License

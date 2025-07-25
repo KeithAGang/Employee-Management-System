@@ -1,5 +1,6 @@
+version: '3.8'
+
 services:
-  # PostgreSQL service
   postgres:
     image: postgres:15
     container_name: ems_postgres
@@ -18,7 +19,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # ASP.NET Core backend
   backend:
     build:
       context: ./backend
@@ -30,12 +30,15 @@ services:
     environment:
       ConnectionStrings__PGConnection: "Host=postgres;Port=5432;Database=ems_db;Username=ems_user;Password=ems_password"
       ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: "https://+*:7026"
+      ASPNETCORE_URLS: "https://+:7026"  # Fixed syntax
     ports:
       - "7026:7026"
+    expose:
+      - "7026"
     restart: unless-stopped
+    volumes:
+      - ./certs:/https
 
-  # React Vite frontend
   frontend:
     build:
       context: ./frontend
@@ -44,6 +47,11 @@ services:
     ports:
       - "5173:5173"
     restart: unless-stopped
+    expose:
+      - "5173"
+    volumes:
+    - ./certs:/etc/ssl/certs:ro
+    - ./certs:/etc/ssl/private:ro
 
 volumes:
   pgdata:

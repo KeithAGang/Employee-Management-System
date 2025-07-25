@@ -46,6 +46,8 @@ namespace backend.Data
                 var passwordHash = new PasswordHasher<User>()
                     .HashPassword(managerUser, "12345678");
 
+                managerUser.PasswordHash = passwordHash;
+
                 // Create a new Manager profile
                 var managerProfile = new Manager
                 {
