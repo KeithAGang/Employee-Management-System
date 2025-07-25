@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Link } from "@tanstack/react-router"
 import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import axios from "axios"
@@ -65,8 +64,6 @@ export function CreateEmployeeProfileForm({
   const {
     mutate,
     isPending,
-    isError,
-    error,
   } = useMutation<CreateEmployeeProfileResponseDto, Error, CreateEmployeeProfileRequestDto>({
     mutationFn: async (credentials) => {
       const response = await axios.post(`${API_BASE_URL}/employee/create-profile`, credentials, {

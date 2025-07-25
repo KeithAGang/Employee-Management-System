@@ -73,8 +73,6 @@ export function SignUpForm({
   const {
     mutate,
     isPending,
-    isError,
-    error,
   } = useMutation<RegisterResponseDto, Error, RegisterRequestDto>({
     mutationFn: async (credentials) => {
       const response = await axios.post(`${API_BASE_URL}/user/register`, credentials, {

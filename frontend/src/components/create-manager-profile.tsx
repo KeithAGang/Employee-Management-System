@@ -61,8 +61,6 @@ export function CreateManagerProfileForm({
   const {
     mutate,
     isPending,
-    isError,
-    error,
   } = useMutation<CreateManagerProfileResponseDto, Error, CreateManagerProfileRequestDto>({
     mutationFn: async (credentials) => {
       // The backend route is /manager/create-profile

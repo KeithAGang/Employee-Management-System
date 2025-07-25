@@ -1,5 +1,4 @@
 // src/components/EmployeeSalesRecordsCards.tsx
-import * as React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useEmployeeSalesRecords } from '@/hooks/useEmployeeSalesRecords';

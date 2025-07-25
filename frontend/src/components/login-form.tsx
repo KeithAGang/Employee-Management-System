@@ -55,7 +55,7 @@ export function LoginForm({
     },
   });
 
-  const { mutate, isPending, isError, error } = useMutation<
+  const { mutate, isPending} = useMutation<
     LoginResponseDto,
     Error,
     LoginFormData

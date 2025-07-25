@@ -70,8 +70,6 @@ export function EditManagerProfileForm({
   const {
     mutate,
     isPending,
-    isError: isMutationError, // Renamed to avoid conflict with potential global isError
-    error: mutationError,     // Renamed to avoid conflict
   } = useMutation<UpdateManagerProfileDto, Error, UpdateManagerProfileDto>({
     mutationFn: async (updateData) => {
       const response = await axios.put<UpdateManagerProfileDto>(

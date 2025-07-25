@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useSubordinateSalesRecords } from '@/hooks/useSubordinateSalesRecords';

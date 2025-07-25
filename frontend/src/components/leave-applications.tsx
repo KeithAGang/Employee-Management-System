@@ -1,8 +1,6 @@
-// src/components/ManagerAllLeaveApplications.tsx
 import * as React from "react";
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import type { ManagerProfileDto, LeaveApplicationIdDto, LeaveApplicationDto, EmployeeShort } from '@/types/dtos';
 import axios from 'axios';
