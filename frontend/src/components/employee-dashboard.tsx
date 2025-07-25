@@ -25,12 +25,17 @@ const data = {
             items: [
                 {
                     title: "Add Sales Record",
-                    to: "/sales/add",
+                    to: "/employee/sales/add",
                     isActive: false,
                 },
                 {
                     title: "Update Sales Record",
-                    to: "/sales/update",
+                    to: "/employee/sales/update",
+                    isActive: false,
+                },
+                {
+                    title: "All Sales Record",
+                    to: "/employee/sales",
                     isActive: false,
                 },
             ],

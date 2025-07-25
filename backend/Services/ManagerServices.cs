@@ -24,7 +24,8 @@ namespace backend.Services
             {
                 UserId = user.Id,
                 OfficeLocation = createManagerProfileDto.OfficeLocation,
-                Department = createManagerProfileDto.Department
+                Department = createManagerProfileDto.Department,
+                IsActive = false
             };
 
             await _dbContext.Managers.AddAsync(manager);
@@ -203,10 +204,34 @@ namespace backend.Services
             await _dbContext.Notifications.AddAsync(notification);
 
             await _dbContext.SaveChangesAsync();
-            
+
             await _hub.Clients.User(subordinate.User.Email)
                 .SendNotification(sendNotification);
         }
 
+        public async Task<ICollection<GetSalesDtoEx>> GetSubordiantesSalesRecordsAsync(Guid userId)
+        {
+            var user = await _dbContext.Managers
+                .Include(s => s.DirectReports)
+                    .ThenInclude(u => u.User)
+                .Include(s => s.DirectReports)
+                    .ThenInclude(u => u.SalesRecords)
+                .FirstOrDefaultAsync(e => e.UserId == userId) ?? throw new ManagerNotFoundException();
+
+            return [.. user.DirectReports
+                .SelectMany(e => e.SalesRecords.Select(
+                    sr => new GetSalesDtoEx(
+                        sr.Id,
+                        sr.CustomerName,
+                        e.User.FullName(),
+                        sr.SaleDate,
+                        sr.Quantity,
+                        sr.UnitPrice,
+                        sr.TotalAmount,
+                        sr.Notes ?? ""
+                    )
+                ))];
+        }
     }
+
 }

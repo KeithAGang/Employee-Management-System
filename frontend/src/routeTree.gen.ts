@@ -13,11 +13,14 @@ import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as SetupRouteRouteImport } from './routes/setup/route'
 import { Route as ManagerRouteRouteImport } from './routes/manager/route'
+import { Route as EmployeeRouteRouteImport } from './routes/employee/route'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ManagerIndexRouteImport } from './routes/manager/index'
+import { Route as EmployeeIndexRouteImport } from './routes/employee/index'
 import { Route as SetupManagerProfileRouteImport } from './routes/setup/manager-profile'
 import { Route as SetupEmployeeProfileRouteImport } from './routes/setup/employee-profile'
+import { Route as ManagerReportsRouteImport } from './routes/manager/reports'
 import { Route as ManagerPromoteRouteImport } from './routes/manager/promote'
 import { Route as ManagerNotificationsRouteImport } from './routes/manager/notifications'
 import { Route as ManagerLeaveApplicationsRouteImport } from './routes/manager/leave-applications'
@@ -48,6 +51,11 @@ const ManagerRouteRoute = ManagerRouteRouteImport.update({
   path: '/manager',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EmployeeRouteRoute = EmployeeRouteRouteImport.update({
+  id: '/employee',
+  path: '/employee',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -63,6 +71,11 @@ const ManagerIndexRoute = ManagerIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
+const EmployeeIndexRoute = EmployeeIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EmployeeRouteRoute,
+} as any)
 const SetupManagerProfileRoute = SetupManagerProfileRouteImport.update({
   id: '/manager-profile',
   path: '/manager-profile',
@@ -72,6 +85,11 @@ const SetupEmployeeProfileRoute = SetupEmployeeProfileRouteImport.update({
   id: '/employee-profile',
   path: '/employee-profile',
   getParentRoute: () => SetupRouteRoute,
+} as any)
+const ManagerReportsRoute = ManagerReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => ManagerRouteRoute,
 } as any)
 const ManagerPromoteRoute = ManagerPromoteRouteImport.update({
   id: '/promote',
@@ -124,6 +142,7 @@ const ManagerEmployeeNameRoute = ManagerEmployeeNameRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
+  '/employee': typeof EmployeeRouteRouteWithChildren
   '/manager': typeof ManagerRouteRouteWithChildren
   '/setup': typeof SetupRouteRouteWithChildren
   '/about': typeof AboutRoute
@@ -136,8 +155,10 @@ export interface FileRoutesByFullPath {
   '/manager/leave-applications': typeof ManagerLeaveApplicationsRoute
   '/manager/notifications': typeof ManagerNotificationsRoute
   '/manager/promote': typeof ManagerPromoteRoute
+  '/manager/reports': typeof ManagerReportsRoute
   '/setup/employee-profile': typeof SetupEmployeeProfileRoute
   '/setup/manager-profile': typeof SetupManagerProfileRoute
+  '/employee/': typeof EmployeeIndexRoute
   '/manager/': typeof ManagerIndexRoute
   '/manager/employee/$name': typeof ManagerEmployeeNameRoute
 }
@@ -155,8 +176,10 @@ export interface FileRoutesByTo {
   '/manager/leave-applications': typeof ManagerLeaveApplicationsRoute
   '/manager/notifications': typeof ManagerNotificationsRoute
   '/manager/promote': typeof ManagerPromoteRoute
+  '/manager/reports': typeof ManagerReportsRoute
   '/setup/employee-profile': typeof SetupEmployeeProfileRoute
   '/setup/manager-profile': typeof SetupManagerProfileRoute
+  '/employee': typeof EmployeeIndexRoute
   '/manager': typeof ManagerIndexRoute
   '/manager/employee/$name': typeof ManagerEmployeeNameRoute
 }
@@ -164,6 +187,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
+  '/employee': typeof EmployeeRouteRouteWithChildren
   '/manager': typeof ManagerRouteRouteWithChildren
   '/setup': typeof SetupRouteRouteWithChildren
   '/about': typeof AboutRoute
@@ -176,8 +200,10 @@ export interface FileRoutesById {
   '/manager/leave-applications': typeof ManagerLeaveApplicationsRoute
   '/manager/notifications': typeof ManagerNotificationsRoute
   '/manager/promote': typeof ManagerPromoteRoute
+  '/manager/reports': typeof ManagerReportsRoute
   '/setup/employee-profile': typeof SetupEmployeeProfileRoute
   '/setup/manager-profile': typeof SetupManagerProfileRoute
+  '/employee/': typeof EmployeeIndexRoute
   '/manager/': typeof ManagerIndexRoute
   '/manager/employee/$name': typeof ManagerEmployeeNameRoute
 }
@@ -186,6 +212,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/employee'
     | '/manager'
     | '/setup'
     | '/about'
@@ -198,8 +225,10 @@ export interface FileRouteTypes {
     | '/manager/leave-applications'
     | '/manager/notifications'
     | '/manager/promote'
+    | '/manager/reports'
     | '/setup/employee-profile'
     | '/setup/manager-profile'
+    | '/employee/'
     | '/manager/'
     | '/manager/employee/$name'
   fileRoutesByTo: FileRoutesByTo
@@ -217,14 +246,17 @@ export interface FileRouteTypes {
     | '/manager/leave-applications'
     | '/manager/notifications'
     | '/manager/promote'
+    | '/manager/reports'
     | '/setup/employee-profile'
     | '/setup/manager-profile'
+    | '/employee'
     | '/manager'
     | '/manager/employee/$name'
   id:
     | '__root__'
     | '/'
     | '/auth'
+    | '/employee'
     | '/manager'
     | '/setup'
     | '/about'
@@ -237,8 +269,10 @@ export interface FileRouteTypes {
     | '/manager/leave-applications'
     | '/manager/notifications'
     | '/manager/promote'
+    | '/manager/reports'
     | '/setup/employee-profile'
     | '/setup/manager-profile'
+    | '/employee/'
     | '/manager/'
     | '/manager/employee/$name'
   fileRoutesById: FileRoutesById
@@ -246,6 +280,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  EmployeeRouteRoute: typeof EmployeeRouteRouteWithChildren
   ManagerRouteRoute: typeof ManagerRouteRouteWithChildren
   SetupRouteRoute: typeof SetupRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
@@ -282,6 +317,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/employee': {
+      id: '/employee'
+      path: '/employee'
+      fullPath: '/employee'
+      preLoaderRoute: typeof EmployeeRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -303,6 +345,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
+    '/employee/': {
+      id: '/employee/'
+      path: '/'
+      fullPath: '/employee/'
+      preLoaderRoute: typeof EmployeeIndexRouteImport
+      parentRoute: typeof EmployeeRouteRoute
+    }
     '/setup/manager-profile': {
       id: '/setup/manager-profile'
       path: '/manager-profile'
@@ -316,6 +365,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/setup/employee-profile'
       preLoaderRoute: typeof SetupEmployeeProfileRouteImport
       parentRoute: typeof SetupRouteRoute
+    }
+    '/manager/reports': {
+      id: '/manager/reports'
+      path: '/reports'
+      fullPath: '/manager/reports'
+      preLoaderRoute: typeof ManagerReportsRouteImport
+      parentRoute: typeof ManagerRouteRoute
     }
     '/manager/promote': {
       id: '/manager/promote'
@@ -399,12 +455,25 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface EmployeeRouteRouteChildren {
+  EmployeeIndexRoute: typeof EmployeeIndexRoute
+}
+
+const EmployeeRouteRouteChildren: EmployeeRouteRouteChildren = {
+  EmployeeIndexRoute: EmployeeIndexRoute,
+}
+
+const EmployeeRouteRouteWithChildren = EmployeeRouteRoute._addFileChildren(
+  EmployeeRouteRouteChildren,
+)
+
 interface ManagerRouteRouteChildren {
   ManagerApproveApplicationRoute: typeof ManagerApproveApplicationRoute
   ManagerEditMyProfileRoute: typeof ManagerEditMyProfileRoute
   ManagerLeaveApplicationsRoute: typeof ManagerLeaveApplicationsRoute
   ManagerNotificationsRoute: typeof ManagerNotificationsRoute
   ManagerPromoteRoute: typeof ManagerPromoteRoute
+  ManagerReportsRoute: typeof ManagerReportsRoute
   ManagerIndexRoute: typeof ManagerIndexRoute
   ManagerEmployeeNameRoute: typeof ManagerEmployeeNameRoute
 }
@@ -415,6 +484,7 @@ const ManagerRouteRouteChildren: ManagerRouteRouteChildren = {
   ManagerLeaveApplicationsRoute: ManagerLeaveApplicationsRoute,
   ManagerNotificationsRoute: ManagerNotificationsRoute,
   ManagerPromoteRoute: ManagerPromoteRoute,
+  ManagerReportsRoute: ManagerReportsRoute,
   ManagerIndexRoute: ManagerIndexRoute,
   ManagerEmployeeNameRoute: ManagerEmployeeNameRoute,
 }
@@ -440,6 +510,7 @@ const SetupRouteRouteWithChildren = SetupRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  EmployeeRouteRoute: EmployeeRouteRouteWithChildren,
   ManagerRouteRoute: ManagerRouteRouteWithChildren,
   SetupRouteRoute: SetupRouteRouteWithChildren,
   AboutRoute: AboutRoute,

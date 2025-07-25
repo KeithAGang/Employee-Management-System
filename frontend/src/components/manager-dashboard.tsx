@@ -16,7 +16,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 
-// Example route paths, replace with your actual route objects/paths
 const data = {
   navMain: [
     {
@@ -52,7 +51,6 @@ const data = {
     },
     {
       title: "Notifications",
-      to: "/notifications",
       items: [
         {
           title: "Inbox",
@@ -63,11 +61,10 @@ const data = {
     },
     {
       title: "Reports",
-      to: "/reports",
       items: [
         {
           title: "All",
-          to: "/reports/all",
+          to: "/manager/reports",
           isActive: false,
         },
       ],

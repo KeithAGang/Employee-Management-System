@@ -152,7 +152,7 @@ namespace backend.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-        
+
         [HttpPut("approve-leave")]
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> ApproveLeave(LeaveApplicationIdDto leaveApplicationIdDto)
@@ -161,7 +161,34 @@ namespace backend.Controllers
             {
                 var userIdGuid = _getIdFromCookie.IdFromToken();
                 await _managerServices.ApproveSubordinateLeave(userIdGuid, leaveApplicationIdDto);
-                return Ok( new {message = "Successfully Approved Leave"} );
+                return Ok(new { message = "Successfully Approved Leave" });
+            }
+            catch (ManagerNotFoundException ex)
+            {
+                _logger.LogError(ex, "Managers not found.");
+                return NotFound(new { message = "No Unpromoted Managers Found." });
+            }
+            catch (LeaveApplicationNotFoundException ex)
+            {
+                _logger.LogError(ex, "Leave Application not found.");
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while creating the manager profile.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+        
+        [HttpGet("get-sales-record")]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> GetAllSalesRecords()
+        {
+            try
+            {
+                var userIdGuid = _getIdFromCookie.IdFromToken();
+                var response = await _managerServices.GetSubordiantesSalesRecordsAsync(userIdGuid);
+                return Ok( response );
             }
             catch (ManagerNotFoundException ex)
             {

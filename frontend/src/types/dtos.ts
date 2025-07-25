@@ -52,3 +52,14 @@ export interface UpdateManagerProfileDto {
 export interface LeaveApplicationIdDto {
   applicationId: string;
 }
+
+export interface GetSalesDtoEx {
+  salesRecordId: string;
+  customerName: string;
+  subordinateName: string;
+  saleDate: string;
+  quantity: number;
+  unitPrice: number;
+  totalAmount: number;
+  notes?: string | null;
+}
