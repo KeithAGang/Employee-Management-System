@@ -26,10 +26,15 @@ import { Route as ManagerNotificationsRouteImport } from './routes/manager/notif
 import { Route as ManagerLeaveApplicationsRouteImport } from './routes/manager/leave-applications'
 import { Route as ManagerEditMyProfileRouteImport } from './routes/manager/edit-my-profile'
 import { Route as ManagerApproveApplicationRouteImport } from './routes/manager/approve-application'
+import { Route as EmployeeProfileRouteImport } from './routes/employee/profile'
+import { Route as EmployeeNotificationsRouteImport } from './routes/employee/notifications'
+import { Route as EmployeeApplyLeaveRouteImport } from './routes/employee/apply-leave'
+import { Route as EmployeeAddSalesRouteImport } from './routes/employee/add-sales'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthPassresetRouteImport } from './routes/auth/passreset'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as ManagerEmployeeNameRouteImport } from './routes/manager/employee/$name'
+import { Route as EmployeeSalesNameRouteImport } from './routes/employee/sales/$name'
 
 const UnauthorizedRoute = UnauthorizedRouteImport.update({
   id: '/unauthorized',
@@ -118,6 +123,26 @@ const ManagerApproveApplicationRoute =
     path: '/approve-application',
     getParentRoute: () => ManagerRouteRoute,
   } as any)
+const EmployeeProfileRoute = EmployeeProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => EmployeeRouteRoute,
+} as any)
+const EmployeeNotificationsRoute = EmployeeNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => EmployeeRouteRoute,
+} as any)
+const EmployeeApplyLeaveRoute = EmployeeApplyLeaveRouteImport.update({
+  id: '/apply-leave',
+  path: '/apply-leave',
+  getParentRoute: () => EmployeeRouteRoute,
+} as any)
+const EmployeeAddSalesRoute = EmployeeAddSalesRouteImport.update({
+  id: '/add-sales',
+  path: '/add-sales',
+  getParentRoute: () => EmployeeRouteRoute,
+} as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -138,6 +163,11 @@ const ManagerEmployeeNameRoute = ManagerEmployeeNameRouteImport.update({
   path: '/employee/$name',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
+const EmployeeSalesNameRoute = EmployeeSalesNameRouteImport.update({
+  id: '/sales/$name',
+  path: '/sales/$name',
+  getParentRoute: () => EmployeeRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -150,6 +180,10 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/auth/passreset': typeof AuthPassresetRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/employee/add-sales': typeof EmployeeAddSalesRoute
+  '/employee/apply-leave': typeof EmployeeApplyLeaveRoute
+  '/employee/notifications': typeof EmployeeNotificationsRoute
+  '/employee/profile': typeof EmployeeProfileRoute
   '/manager/approve-application': typeof ManagerApproveApplicationRoute
   '/manager/edit-my-profile': typeof ManagerEditMyProfileRoute
   '/manager/leave-applications': typeof ManagerLeaveApplicationsRoute
@@ -160,6 +194,7 @@ export interface FileRoutesByFullPath {
   '/setup/manager-profile': typeof SetupManagerProfileRoute
   '/employee/': typeof EmployeeIndexRoute
   '/manager/': typeof ManagerIndexRoute
+  '/employee/sales/$name': typeof EmployeeSalesNameRoute
   '/manager/employee/$name': typeof ManagerEmployeeNameRoute
 }
 export interface FileRoutesByTo {
@@ -171,6 +206,10 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/passreset': typeof AuthPassresetRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/employee/add-sales': typeof EmployeeAddSalesRoute
+  '/employee/apply-leave': typeof EmployeeApplyLeaveRoute
+  '/employee/notifications': typeof EmployeeNotificationsRoute
+  '/employee/profile': typeof EmployeeProfileRoute
   '/manager/approve-application': typeof ManagerApproveApplicationRoute
   '/manager/edit-my-profile': typeof ManagerEditMyProfileRoute
   '/manager/leave-applications': typeof ManagerLeaveApplicationsRoute
@@ -181,6 +220,7 @@ export interface FileRoutesByTo {
   '/setup/manager-profile': typeof SetupManagerProfileRoute
   '/employee': typeof EmployeeIndexRoute
   '/manager': typeof ManagerIndexRoute
+  '/employee/sales/$name': typeof EmployeeSalesNameRoute
   '/manager/employee/$name': typeof ManagerEmployeeNameRoute
 }
 export interface FileRoutesById {
@@ -195,6 +235,10 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/passreset': typeof AuthPassresetRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/employee/add-sales': typeof EmployeeAddSalesRoute
+  '/employee/apply-leave': typeof EmployeeApplyLeaveRoute
+  '/employee/notifications': typeof EmployeeNotificationsRoute
+  '/employee/profile': typeof EmployeeProfileRoute
   '/manager/approve-application': typeof ManagerApproveApplicationRoute
   '/manager/edit-my-profile': typeof ManagerEditMyProfileRoute
   '/manager/leave-applications': typeof ManagerLeaveApplicationsRoute
@@ -205,6 +249,7 @@ export interface FileRoutesById {
   '/setup/manager-profile': typeof SetupManagerProfileRoute
   '/employee/': typeof EmployeeIndexRoute
   '/manager/': typeof ManagerIndexRoute
+  '/employee/sales/$name': typeof EmployeeSalesNameRoute
   '/manager/employee/$name': typeof ManagerEmployeeNameRoute
 }
 export interface FileRouteTypes {
@@ -220,6 +265,10 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/passreset'
     | '/auth/signup'
+    | '/employee/add-sales'
+    | '/employee/apply-leave'
+    | '/employee/notifications'
+    | '/employee/profile'
     | '/manager/approve-application'
     | '/manager/edit-my-profile'
     | '/manager/leave-applications'
@@ -230,6 +279,7 @@ export interface FileRouteTypes {
     | '/setup/manager-profile'
     | '/employee/'
     | '/manager/'
+    | '/employee/sales/$name'
     | '/manager/employee/$name'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -241,6 +291,10 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/passreset'
     | '/auth/signup'
+    | '/employee/add-sales'
+    | '/employee/apply-leave'
+    | '/employee/notifications'
+    | '/employee/profile'
     | '/manager/approve-application'
     | '/manager/edit-my-profile'
     | '/manager/leave-applications'
@@ -251,6 +305,7 @@ export interface FileRouteTypes {
     | '/setup/manager-profile'
     | '/employee'
     | '/manager'
+    | '/employee/sales/$name'
     | '/manager/employee/$name'
   id:
     | '__root__'
@@ -264,6 +319,10 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/passreset'
     | '/auth/signup'
+    | '/employee/add-sales'
+    | '/employee/apply-leave'
+    | '/employee/notifications'
+    | '/employee/profile'
     | '/manager/approve-application'
     | '/manager/edit-my-profile'
     | '/manager/leave-applications'
@@ -274,6 +333,7 @@ export interface FileRouteTypes {
     | '/setup/manager-profile'
     | '/employee/'
     | '/manager/'
+    | '/employee/sales/$name'
     | '/manager/employee/$name'
   fileRoutesById: FileRoutesById
 }
@@ -408,6 +468,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerApproveApplicationRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
+    '/employee/profile': {
+      id: '/employee/profile'
+      path: '/profile'
+      fullPath: '/employee/profile'
+      preLoaderRoute: typeof EmployeeProfileRouteImport
+      parentRoute: typeof EmployeeRouteRoute
+    }
+    '/employee/notifications': {
+      id: '/employee/notifications'
+      path: '/notifications'
+      fullPath: '/employee/notifications'
+      preLoaderRoute: typeof EmployeeNotificationsRouteImport
+      parentRoute: typeof EmployeeRouteRoute
+    }
+    '/employee/apply-leave': {
+      id: '/employee/apply-leave'
+      path: '/apply-leave'
+      fullPath: '/employee/apply-leave'
+      preLoaderRoute: typeof EmployeeApplyLeaveRouteImport
+      parentRoute: typeof EmployeeRouteRoute
+    }
+    '/employee/add-sales': {
+      id: '/employee/add-sales'
+      path: '/add-sales'
+      fullPath: '/employee/add-sales'
+      preLoaderRoute: typeof EmployeeAddSalesRouteImport
+      parentRoute: typeof EmployeeRouteRoute
+    }
     '/auth/signup': {
       id: '/auth/signup'
       path: '/signup'
@@ -436,6 +524,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerEmployeeNameRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
+    '/employee/sales/$name': {
+      id: '/employee/sales/$name'
+      path: '/sales/$name'
+      fullPath: '/employee/sales/$name'
+      preLoaderRoute: typeof EmployeeSalesNameRouteImport
+      parentRoute: typeof EmployeeRouteRoute
+    }
   }
 }
 
@@ -456,11 +551,21 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface EmployeeRouteRouteChildren {
+  EmployeeAddSalesRoute: typeof EmployeeAddSalesRoute
+  EmployeeApplyLeaveRoute: typeof EmployeeApplyLeaveRoute
+  EmployeeNotificationsRoute: typeof EmployeeNotificationsRoute
+  EmployeeProfileRoute: typeof EmployeeProfileRoute
   EmployeeIndexRoute: typeof EmployeeIndexRoute
+  EmployeeSalesNameRoute: typeof EmployeeSalesNameRoute
 }
 
 const EmployeeRouteRouteChildren: EmployeeRouteRouteChildren = {
+  EmployeeAddSalesRoute: EmployeeAddSalesRoute,
+  EmployeeApplyLeaveRoute: EmployeeApplyLeaveRoute,
+  EmployeeNotificationsRoute: EmployeeNotificationsRoute,
+  EmployeeProfileRoute: EmployeeProfileRoute,
   EmployeeIndexRoute: EmployeeIndexRoute,
+  EmployeeSalesNameRoute: EmployeeSalesNameRoute,
 }
 
 const EmployeeRouteRouteWithChildren = EmployeeRouteRoute._addFileChildren(

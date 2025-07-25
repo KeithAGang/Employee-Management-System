@@ -44,7 +44,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("profile")]
-        [Authorize(Roles = "Employee")]
+        [Authorize()]
         public async Task<IActionResult> GetEmployeeProfile()
         {
             try

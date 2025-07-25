@@ -80,7 +80,7 @@ export function LoginForm({
           }, 900);
         } else if (data.role === "Employee") {
           setTimeout(() => {
-            navigate({ to: "/" });
+            navigate({ to: "/employee" });
           }, 900);
         } else {
           setTimeout(() => {

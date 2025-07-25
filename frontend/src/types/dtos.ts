@@ -37,7 +37,7 @@ export interface EmployeeProfileDto {
   managerName: string | null;
   managerEmail: string | null;
   leaveApplications: LeaveApplicationDto[];
-  notifications: any[]; // As per your backend DTO, this is an empty array here
+  notifications: NotificationDto[] | any[];
   leaveDaysTaken: number;
   totalLeaveDays: number;
 }
@@ -61,5 +61,46 @@ export interface GetSalesDtoEx {
   quantity: number;
   unitPrice: number;
   totalAmount: number;
+  notes?: string | null;
+}
+
+export interface GetSalesDto {
+  salesRecordId: string;
+  customerName: string;
+  productName: string;
+  saleDate: string;
+  quantity: number;
+  unitPrice: number;
+  totalAmount: number;
+  notes?: string | null;
+}
+
+export interface UpdateEmployeeProfileDto {
+  firstName?: string | null;
+  lastName?: string | null;
+  position?: string | null;
+  jobTitle?: string | null;
+}
+
+export interface LeaveAppDto {
+  startDate: string;
+  endDate: string;
+  reason: string;
+}
+
+export interface CreateSalesDto {
+  customerName: string;
+  productName: string;
+  quantity: number;
+  unitPrice: number;
+  amount: number;
+  saleDate: string;
+  notes?: string | null;
+}
+
+export interface UpdateSalesDto {
+  salesRecordId: string;
+  customerName?: string | null;
+  productName?: string | null;
   notes?: string | null;
 }

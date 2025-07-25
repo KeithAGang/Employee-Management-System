@@ -25,46 +25,39 @@ const data = {
             items: [
                 {
                     title: "Add Sales Record",
-                    to: "/employee/sales/add",
-                    isActive: false,
-                },
-                {
-                    title: "Update Sales Record",
-                    to: "/employee/sales/update",
+                    to: "/employee/add-sales",
                     isActive: false,
                 },
                 {
                     title: "All Sales Record",
-                    to: "/employee/sales",
+                    to: "/employee/",
                     isActive: false,
                 },
             ],
         },
         {
             title: "Me",
-            to: "/me",
             items: [
                 {
-                    title: "Update My Profile",
-                    to: "/me/profile",
+                    title: "My Profile",
+                    to: "/employee/profile",
+                    isActive: false,
+                },
+                {
+                    title: "Apply For Leave",
+                    to: "/employee/apply-Leave",
                     isActive: false,
                 }
             ],
         },
         {
             title: "Notifications",
-            to: "/notifications",
             items: [
                 {
-                    title: "Read",
-                    to: "/notifications/read",
+                    title: "Inbox",
+                    to: "/employee/notifications",
                     isActive: false,
-                },
-                {
-                    title: "Unread",
-                    to: "/notifications/unread",
-                    isActive: false,
-                },
+                }
             ],
         },
     ],

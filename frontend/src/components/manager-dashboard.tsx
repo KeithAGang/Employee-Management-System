@@ -35,7 +35,6 @@ const data = {
     },
     {
       title: "Manager",
-      to: "/manager",
       items: [
         {
           title: "Update My Profile",
