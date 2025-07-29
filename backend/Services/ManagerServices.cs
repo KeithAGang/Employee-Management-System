@@ -83,8 +83,16 @@ namespace backend.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<ManagerProfileDto[]> GetUnpromotedManagerProfile()
+        public async Task<ManagerProfileDto[]> GetUnpromotedManagerProfile(Guid userId)
         {
+            var user = await _dbContext.Managers
+                .FirstOrDefaultAsync(u => u.UserId == userId);
+
+            if (!user!.IsActive)
+            {
+                return [];
+            }
+            
             var profiles = await _dbContext.Managers
                 .Include(m => m.User)
                 .Where(m => !m.IsActive)

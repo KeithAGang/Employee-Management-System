@@ -90,7 +90,7 @@ namespace backend.Controllers
             try
             {
                 var userIdGuid = _getIdFromCookie.IdFromToken();
-                var profiles = await _managerServices.GetUnpromotedManagerProfile();
+                var profiles = await _managerServices.GetUnpromotedManagerProfile(userIdGuid);
                 return Ok(profiles);
             }
             catch (ManagerNotFoundException ex)
