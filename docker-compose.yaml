@@ -17,6 +17,29 @@ services:
       timeout: 5s
       retries: 5
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: ems_pgadmin
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+      PGADMIN_SERVER_AUTOSTART: "True"
+      PGADMIN_SERVER_GROUP: "ems_db"
+      PGADMIN_SERVER_NAME: "ems_db"
+      PGADMIN_SERVER_HOST: "postgres"
+      PGADMIN_SERVER_PORT: 5432
+      PGADMIN_SERVER_DB: "ems_db"
+      PGADMIN_SERVER_USERNAME: "ems_user"
+      PGADMIN_SERVER_PASSWORD: "ems_password"
+    ports:
+      - "6554:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
   backend:
     build:
       context: ./backend
@@ -53,3 +76,4 @@ services:
 
 volumes:
   pgdata:
+  pgadmin_data:
