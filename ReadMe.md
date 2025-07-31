@@ -107,9 +107,13 @@ docker-compose up --build
 
 **Default Manager:** Email is manager@firm.com Password is 12345678
 
+**Db Migrations:** The backend automatically runs any pending migrations at startup. 
+
 ## 🛠️ Running with Makefile
 
 ### ⚡ Windows (PowerShell or CMD)
+
+Note that you need `mkcert` on your system for this to work.
 
 Open a terminal in the project root.
 
